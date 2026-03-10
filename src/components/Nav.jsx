@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Login from "./Login";
+import Login from "../pages/Login";
 
 export default function Nav(){
     return(
