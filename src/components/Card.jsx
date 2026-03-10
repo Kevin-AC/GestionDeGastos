@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Card({ nombre }) {
     return (
         <div className="w-80 h-96 p-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-xl border border-Neutral-2/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 space-y-4">
@@ -16,12 +18,16 @@ export default function Card({ nombre }) {
             </div>
 
             <div className="flex gap-3 pt-2">
-                <button className="flex-1 h-10 px-4 text-sm font-semibold text-white bg-Verde hover:bg-Verde/90 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Verde/50">
-                    Agregar
-                </button>
-                <button className="flex-1 h-10 px-4 text-sm font-semibold text-gray-700 bg-Neutral hover:bg-Neutral/80 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
-                    Editar
-                </button>
+                <Link to='/newGasto'>
+                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-white bg-Verde hover:bg-Verde/90 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Verde/50">
+                        Agregar
+                    </button>
+                </Link>
+               <Link to='/login'>
+                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-gray-700 bg-Neutral hover:bg-Neutral/80 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
+                        Editar
+                    </button>
+               </Link>
             </div>
         </div>
 

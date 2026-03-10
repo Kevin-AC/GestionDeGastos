@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import Login from "./Login";
+
 export default function Nav(){
     return(
         <nav className="bg-Neutral-1/90 border-b border-Neutral-2/50 shadow-lg sticky top-0 z-50">
@@ -10,9 +13,9 @@ export default function Nav(){
 
                     {/* Desktop Nav Links */}
                     <ul className="hidden md:flex items-center gap-8">
-                        <li><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Dashboard</a></li>
-                        <li><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agrergar Gastos</a></li>
-                        <li><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agregar Ingresos</a></li>
+                        <li><Link to='/'><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Home</a></Link></li>
+                        <li><Link to='/newGasto'><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agrergar Gastos</a></Link></li>
+                        <li><Link to='/newIngreso'><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agregar Ingresos</a></Link></li>
                         <li><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Estadisticas</a></li>
                     </ul>
                 </div>

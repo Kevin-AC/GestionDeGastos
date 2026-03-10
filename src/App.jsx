@@ -1,5 +1,5 @@
-import NewGasto from "./components/NewGasto"
-import Main from "./components/Main"
+
+import Home from "./components/Home"
 import Nav from "./components/Nav"
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Nav/>
-      <Main/>
+      <Home/>
     </div>
   )
 }
