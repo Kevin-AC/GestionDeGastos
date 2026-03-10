@@ -1,0 +1,36 @@
+export default function Main(){
+    return(
+        <main className="flex">
+                <div className="w-1/3 h-screen">
+                  <section className="w-3/4 h-full px-6 py-12 bg-Neutral-1/80 backdrop-blur-xl border-r border-Neutral-2/50 shadow-lg bg-linear-to-br">
+                    <h1 className="text-4xl font-black text-gray-800 leading-tight mb-12">
+                      Kevin Argumedo
+                    </h1>
+        
+                    <div className="space-y-1 mb-8 p-6 bg-Verde/10 backdrop-blur-md rounded-2xl border  border-Verde/30 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+                      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Total</h2>
+                      <p className="text-3xl font-black text-gray-900">$500.000</p>
+                    </div>
+        
+                    <div className="space-y-1 p-6  bg-Neutral/70 backdrop-blur-md rounded-2xl border border-Neutral-2/50  shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+                      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Total Gastos</h2>
+                      <p className="text-3xl font-black text-gray-900">$250.000</p>
+                    </div>
+                  </section>
+        
+        
+        
+        
+                </div>
+        
+                <div className="py-10 grid grid-cols-3 gap-4  ">
+                  <Card nombre={'Ocio'} />
+                  <Card nombre={'Comida'} />
+                  <Card nombre={'Servicios'} />
+                  <Card nombre={'Transporte'} />
+                  <Card nombre={'Hogar'} />
+                </div>
+        
+              </main>
+    )
+}
