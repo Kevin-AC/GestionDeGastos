@@ -1,8 +1,10 @@
 import CardGasto from "../components/CardGasto";
+import Nav from "../components/Nav";
 
 export default function ListaGastos(){
     return(
         <section>
+            <Nav/>
             <div className="p-8 max-w-4xl mx-auto space-y-6">
 
                 {/* Categoría Comida */}
