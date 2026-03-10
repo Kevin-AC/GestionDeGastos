@@ -1,11 +1,10 @@
-import Card from './components/Card'
-import Login from './components/Login'
+import Main from "./components/Main"
 
 function App() {
 
   return (
-    <div className='h-screen grid place-content-center '>
-      <Login/>
+    <div>
+      <Main/>
     </div>
     
       

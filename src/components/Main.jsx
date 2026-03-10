@@ -1,6 +1,7 @@
+import Card from './Card'
 export default function Main(){
     return(
-        <main className="flex">
+        <section className="flex">
                 <div className="w-1/3 h-screen">
                   <section className="w-3/4 h-full px-6 py-12 bg-Neutral-1/80 backdrop-blur-xl border-r border-Neutral-2/50 shadow-lg bg-linear-to-br">
                     <h1 className="text-4xl font-black text-gray-800 leading-tight mb-12">
@@ -31,6 +32,6 @@ export default function Main(){
                   <Card nombre={'Hogar'} />
                 </div>
         
-              </main>
+              </section>
     )
 }
