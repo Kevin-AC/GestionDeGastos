@@ -12,11 +12,23 @@ export default function Main(){
       let total=0;
       for(let i=1;i<data.length;i++){
         if (data[i]&&data[i].gastos){
-          data[i].gastos.forEach(gastos=>{total += gastos.monto})
+          const gastosPorCategoria=calcularGastoPorCategoria(data[i].gastos);
+          //console.log(gastosPorCategoria)
+          total+=gastosPorCategoria
         }
       }
-      //console.log(total)
+      
       return total
+    }
+
+    const calcularGastoPorCategoria=(gastos)=>{//calcular el gasto por cada categoria
+      if(!gastos||gastos.length===0)return 0;
+      let totalCategoria=0;
+      gastos.forEach(gastos=>{
+        totalCategoria += gastos.monto
+      })
+      //console.log('gatocategoria',totalCategoria)
+      return totalCategoria;
     }
     if(!data)return
     return(
@@ -44,11 +56,17 @@ export default function Main(){
                 </div>
         
                 <div className="py-10 max-w-2/3 flex flex-wrap gap-5  ">
-                  <CardCategoria nombre={'Ocio'} />
-                  <CardCategoria nombre={'Comida'} />
-                  <CardCategoria nombre={'Servicios'} />
-                  <CardCategoria nombre={'Transporte'} />
-                  <CardCategoria nombre={'Hogar'} />
+                  {data.slice(1).map((categoria)=>(
+                    <CardCategoria
+                      key={categoria.id}
+                      nombre={categoria.nombre}
+                      valorP={categoria.presupuesto.toLocaleString()}
+                      valorG={calcularGastoPorCategoria(categoria.gastos).toLocaleString()}
+
+
+                    />
+                  ))}
+                  
                 </div>
         
               </section>
