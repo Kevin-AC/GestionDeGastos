@@ -52,9 +52,10 @@ export default function Main(){
                 </div>
         
                 <div className="py-10 max-w-2/3 flex flex-wrap gap-5  ">
-                  {data.slice(1).map((categoria)=>(
+                  {data.slice(1).map((categoria)=>(//renderizar dinamicamente cada card desde el data
                     <CardCategoria
                       key={categoria.id}
+                      catId={categoria.id}
                       nombre={categoria.nombre}
                       valorP={categoria.presupuesto.toLocaleString()}
                       valorG={calcularGastoPorCategoria(categoria.gastos).toLocaleString()}

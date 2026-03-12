@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Nav from "../components/Nav";
 import { useState } from 'react';
 import { useData } from "../hook/useData";
@@ -9,7 +10,7 @@ export default function NewGasto(){
     const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
     
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=(e)=>{//capturar datos del cada input 
         e.preventDefault();
         const nuevoGasto={
             id:Date.now(),
@@ -17,7 +18,7 @@ export default function NewGasto(){
             monto:Number(monto),
             fecha,
         }
-        console.log(nuevoGasto)
+        //console.log(nuevoGasto)
     }
     
     if (!data) return
@@ -66,8 +67,8 @@ export default function NewGasto(){
                             <select className="w-full h-14 px-2 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     value={categoria}
                                 onChange={(e) => setCategoria(parseInt(e.target.value))}>//capturar el valor del target en el input
-                                {data?.slice(1).map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>//categorias desde el data
+                                {data?.slice(1).map(cat => (//Renderiza la lista de categorias desde el data
+                                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>
                                 ))}
                             </select>
                         </div>
@@ -83,7 +84,7 @@ export default function NewGasto(){
                                     type="date"
                                     value={fecha}
                                     onChange={(e)=>setFecha(e.target.value)}
-                                    defaultValue={new Date().toISOString().split('T')[0]} // Hoy por default
+                                    defaultValue={new Date().toISOString().split('T')[0]} //fehca de hoy por default
                                 />
                             </div>
                         </div>
@@ -92,7 +93,7 @@ export default function NewGasto(){
                         <button
                             type="submit"
                             className="w-full h-14 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-lg uppercase tracking-wide rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-200 border-2 border-Verde/50"
-                            onClick={handleSubmit}
+                            onClick={handleSubmit}//enviar los datos capturados en cada input
                         >
                             Guardar Gasto
                         </button>
