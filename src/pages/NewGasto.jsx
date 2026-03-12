@@ -1,6 +1,27 @@
 import Nav from "../components/Nav";
-
+import { useState } from 'react';
+import { useData } from "../hook/useData";
 export default function NewGasto(){
+    const data=useData();
+    const [nombre,setNombre] = useState('')
+    const [monto,setMonto] = useState(0)
+    const [categoria,setCategoria]=useState(1);
+    const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
+    
+
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+        const nuevoGasto={
+            id:Date.now(),
+            descripcion:nombre,
+            monto:Number(monto),
+            fecha,
+        }
+        console.log(nuevoGasto)
+    }
+    
+    if (!data) return
+    
     return(
         <>
         <Nav/>
@@ -13,6 +34,18 @@ export default function NewGasto(){
 
                     <form className="space-y-6">
                         <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Nombre</label>
+                            <div className="relative">
+                                <input
+                                    className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    type="text"
+                                    placeholder="Cocacola"
+                                    value={nombre}
+                                    onChange={(e)=>setNombre(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Monto</label>
                             <div className="relative">
 
@@ -20,6 +53,8 @@ export default function NewGasto(){
                                     className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     type="number"
                                     placeholder="$ 2.200"
+                                    value={monto}
+                                    onChange={(e)=>setMonto(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -28,12 +63,12 @@ export default function NewGasto(){
                             <label className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
                                 Categoría
                             </label>
-                            <select className="w-full h-14 px-2 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl">
-                                <option>Comida</option>
-                                <option>Transporte</option>
-                                <option>Hogar</option>
-                                <option>Ocio</option>
-                                <option>Servicios</option>
+                            <select className="w-full h-14 px-2 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    value={categoria}
+                                onChange={(e) => setCategoria(parseInt(e.target.value))}>//capturar el valor del target en el input
+                                {data?.slice(1).map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>//categorias desde el data
+                                ))}
                             </select>
                         </div>
 
@@ -46,6 +81,8 @@ export default function NewGasto(){
                                 <input
                                     className="w-full h-14 pl-12 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl appearance-none cursor-pointer"
                                     type="date"
+                                    value={fecha}
+                                    onChange={(e)=>setFecha(e.target.value)}
                                     defaultValue={new Date().toISOString().split('T')[0]} // Hoy por default
                                 />
                             </div>
@@ -55,6 +92,7 @@ export default function NewGasto(){
                         <button
                             type="submit"
                             className="w-full h-14 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-lg uppercase tracking-wide rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-200 border-2 border-Verde/50"
+                            onClick={handleSubmit}
                         >
                             Guardar Gasto
                         </button>
