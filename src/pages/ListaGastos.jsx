@@ -2,11 +2,15 @@ import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 import { useData } from "../hook/useData";
 import { useCategory } from "../contexts/CategoriasContexts";
+import { calcularGastoPorCategoria } from "../logic/calcularGastoPorCategoria";
 export default function ListaGastos(){
     const { categoriaId } = useCategory();
     const data=useData();
-   
-    console.log(categoriaId)
+    // ✅ console.log ANTES del return
+    console.log('ID:', categoriaId);
+    console.log('Data:', data);
+    const gastoTotal = calcularGastoPorCategoria(data?.[categoriaId]?.gastos || []);
+
     if(!data)return
     return(
         <section>
@@ -26,7 +30,7 @@ export default function ListaGastos(){
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-2xl font-bold text-gray-900">$75.000</p>
+                            <p className="text-2xl font-bold text-gray-900">${gastoTotal.toLocaleString()}</p>
                             <p className="text-sm text-gray-500">3.0% del presupuesto</p>
                         </div>
                     </div>
