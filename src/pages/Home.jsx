@@ -1,13 +1,8 @@
 import CardCategoria from '../components/CardCategoria'
-import { useState, useEffect } from 'react';
-import { mockData } from '../mock/dataMock';
+import { useData } from '../hook/useData';
 export default function Main(){
-    const[data,setData]= useState(null)
-    useEffect(()=>{
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setData(mockData)
-    },[])
-
+    const data = useData();
+  
     const calcularTotalGastos=(data)=>{//calcular el total de los gastos 
       let total=0;
       for(let i=1;i<data.length;i++){
@@ -30,6 +25,7 @@ export default function Main(){
       //console.log('gatocategoria',totalCategoria)
       return totalCategoria;
     }
+
     if(!data)return
     return(
         <section className="flex">
