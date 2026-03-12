@@ -18,10 +18,10 @@ export default function ListaGastos(){
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-Verde/10 border-2 border-Verde/30 flex items-center justify-center">
-                                <span className="text-xl font-bold text-Verde"></span>
+                                <span className="text-xl font-bold text-Verde">{data?.[categoriaId].nombre.slice(0, 1)}</span>
                             </div>
                             <div>
-                                <h3 className="text-xl font-black text-gray-900">Comida</h3>
+                                <h3 className="text-xl font-black text-gray-900">{data?.[categoriaId].nombre}</h3>
                                 <p className="text-sm text-gray-600">3 gastos</p>
                             </div>
                         </div>
