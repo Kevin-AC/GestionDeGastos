@@ -1,7 +1,13 @@
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
-
+import { useData } from "../hook/useData";
+import { useCategory } from "../contexts/CategoriasContexts";
 export default function ListaGastos(){
+    const { categoriaId } = useCategory();
+    const data=useData();
+   
+    console.log(categoriaId)
+    if(!data)return
     return(
         <section>
             <Nav/>
@@ -12,7 +18,7 @@ export default function ListaGastos(){
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-Verde/10 border-2 border-Verde/30 flex items-center justify-center">
-                                <span className="text-xl font-bold text-Verde">C</span>
+                                <span className="text-xl font-bold text-Verde"></span>
                             </div>
                             <div>
                                 <h3 className="text-xl font-black text-gray-900">Comida</h3>
@@ -28,26 +34,14 @@ export default function ListaGastos(){
                         <div className="h-full bg-Verde rounded-full" style={{ width: '3%' }} />
                     </div>
                 </div>
-
-                <CardGasto
-                    nombre='Almuerzo Arepa Zone'
-                    fecha='10 Mar 2026'
-                    valor='$25.000'
-                />
-                <CardGasto
-                    nombre='Cena familiar Domino'
-                    fecha='09 Mar 2026'
-                    valor='$30.000'
-                />
-
-                <CardGasto
-                    nombre='Café matutino'
-                    fecha='10 Mar 2026'
-                    valor='$20.000'
-                />
-
-
-                
+                {data?.[categoriaId]?.gastos?.map((gastos)=>
+                    <CardGasto
+                        key={gastos.id}
+                        nombre={gastos.descripcion}
+                        fecha={gastos.fecha}
+                        valor={gastos.monto}
+                    />
+                )}            
 
             </div>
 
