@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Login() {
     return (
         <main className="grid place-content-center h-screen">
@@ -23,9 +25,12 @@ export default function Login() {
 
 
                 </div>
-                <button className="w-full h-12 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-sm uppercase tracking-wide rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 border border-Verde/50">
-                    Iniciar Sesión
-                </button>
+                <div className="flex flex-col items-center w-full gap-4">
+                    <button className="w-full h-12 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-sm uppercase tracking-wide rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 border border-Verde/50">
+                        Iniciar Sesión
+                    </button>
+                    <Link to='/registro' className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Registrarse</Link>
+                </div>
             </div>
         </main>
     )
