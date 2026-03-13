@@ -8,6 +8,8 @@ import NewGasto from './pages/NewGasto.jsx'
 import ListaGastos from './pages/ListaGastos.jsx';
 import RegistroUsuario from './pages/RegistroUsuario.jsx';
 import { CategoriaProvider } from './contexts/CategoriasContexts.jsx';
+import NewIngreso from './pages/NewIngreso.jsx';
+import Estadistica from './pages/Estadistica.jsx';
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
    <CategoriaProvider>
@@ -17,6 +19,8 @@ createRoot(document.getElementById('root')).render(
         <Route path='/newGasto' element={<NewGasto />} />
         <Route path='/listaGastos' element={<ListaGastos />} />
         <Route path='/registro' element={<RegistroUsuario/>}/>
+        <Route path='/newIngreso' element={<NewIngreso/>}/>
+        <Route path='/estadistica' element={<Estadistica/>}/>
       </Routes>
    </CategoriaProvider>
   </BrowserRouter>

@@ -16,7 +16,7 @@ export default function Nav(){
                         <li><Link to='/newGasto'
                             className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agrergar Gastos</Link></li>
                         <li><Link to='/newIngreso' className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Agregar Ingresos</Link></li>
-                        <li><a href="#" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all">Estadisticas</a></li>
+                        <li><Link to='/estadistica' className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline underline-offset-4 transition-all" >Estadistica</Link></li>
                     </ul>
                 </div>
             </div>
