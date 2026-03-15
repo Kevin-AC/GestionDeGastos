@@ -1,24 +1,41 @@
-/* eslint-disable no-unused-vars */
+
 import Nav from "../components/Nav";
 import { useState } from 'react';
-import { useData } from "../hook/useData";
+import { useData, usePost } from "../hook/useData";
 export default function NewGasto(){
     const data=useData();
-    const [nombre,setNombre] = useState('')
-    const [monto,setMonto] = useState(0)
-    const [categoria,setCategoria]=useState(1);
-    const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
-    
+    const postData=usePost();
 
-    const handleSubmit=(e)=>{//capturar datos del cada input 
+    const  [formData,setFormData]=useState({
+        idUsuario:1,
+        categoria_id:1,
+        descripcion:'',
+        monto:'',
+        fecha: new Date().toISOString().split('T')[0]
+    })
+
+    const handleChange=(e)=>{
+        const {name,value}=e.target;
+        setFormData(prev =>({
+            ...prev,[name]:name === 'monto' ? Number(value):value
+        }));
+
+    }
+
+    const handleSubmit= async (e)=>{//capturar datos del cada input 
         e.preventDefault();
-        const nuevoGasto={
-            id:Date.now(),
-            descripcion:nombre,
-            monto:Number(monto),
-            fecha,
+        console.log(handleChange)
+        try{
+            const result = await postData('TransaccionServlet',formData);
+            console.log("Respuesta del servidor:",result);
+            alert('Gasto Guardado');
+            setFormData({
+                idUsuario: 1, categoria_id: 1, descripcion: '', monto: 0, fecha: new Date().toISOString().split('T')[0]
+            })
+        }catch(error){
+            console.error("Error:",error)
+            alert('Error: ' + error.message);
         }
-        //console.log(nuevoGasto)
     }
     
     if (!data) return
@@ -33,7 +50,7 @@ export default function NewGasto(){
                         <div className="w-20 h-1 bg-Verde mx-auto rounded-full shadow-md"></div>
                     </div>
 
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Nombre</label>
                             <div className="relative">
@@ -41,8 +58,9 @@ export default function NewGasto(){
                                     className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     type="text"
                                     placeholder="Cocacola"
-                                    value={nombre}
-                                    onChange={(e)=>setNombre(e.target.value)}
+                                    value={formData.descripcion}
+                                    name="descripcion"
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -54,8 +72,9 @@ export default function NewGasto(){
                                     className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     type="number"
                                     placeholder="$ 2.200"
-                                    value={monto}
-                                    onChange={(e)=>setMonto(e.target.value)}
+                                    value={formData.monto}
+                                    name="monto"
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -65,11 +84,11 @@ export default function NewGasto(){
                                 Categoría
                             </label>
                             <select className="w-full h-14 px-2 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
-                                    value={categoria}
-                                onChange={(e) => setCategoria(parseInt(e.target.value))}>//capturar el valor del target en el input
-                                {data?.slice(1).map(cat => (//Renderiza la lista de categorias desde el data
-                                    <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-                                ))}
+                                    value={formData.categoria_id}
+                                    name="categoria_id"
+                                    required
+                                onChange={handleChange}>
+                                {data.slice(1).map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
                             </select>
                         </div>
 
@@ -82,8 +101,8 @@ export default function NewGasto(){
                                 <input
                                     className="w-full h-14 pl-12 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl appearance-none cursor-pointer"
                                     type="date"
-                                    value={fecha}
-                                    onChange={(e)=>setFecha(e.target.value)}
+                                    value={formData.fecha}
+                                    onChange={handleChange}
                                     defaultValue={new Date().toISOString().split('T')[0]} //fehca de hoy por default
                                 />
                             </div>
@@ -93,7 +112,7 @@ export default function NewGasto(){
                         <button
                             type="submit"
                             className="w-full h-14 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-lg uppercase tracking-wide rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-200 border-2 border-Verde/50"
-                            onClick={handleSubmit}//enviar los datos capturados en cada input
+                            
                         >
                             Guardar Gasto
                         </button>

@@ -28,7 +28,7 @@ export default function Card({ nombre,valorP,valorG,catId}) {
                 </Link>
                 <Link to='/listaGastos' onClick={() => setCategoriaId(catId)}>
                     <button className="flex-1 h-10 px-4 text-sm font-semibold text-gray-700 bg-Neutral hover:bg-Neutral/80 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
-                        Editar
+                        Ver
                     </button>
                </Link>
             </div>
