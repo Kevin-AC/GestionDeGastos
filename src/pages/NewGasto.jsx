@@ -11,33 +11,36 @@ export default function NewGasto(){
         categoria_id:1,
         descripcion:'',
         monto:'',
-        fecha: new Date().toISOString().split('T')[0]
+        fecha: new Date().toISOString().split('T')[0] 
     })
 
     const handleChange=(e)=>{
+        
         const {name,value}=e.target;
         setFormData(prev =>({
             ...prev,[name]:name === 'monto' ? Number(value):value
         }));
-
     }
 
     const handleSubmit= async (e)=>{//capturar datos del cada input 
         e.preventDefault();
-        console.log(handleChange)
+        console.log(formData.fecha)
+
         try{
             const result = await postData('TransaccionServlet',formData);
             console.log("Respuesta del servidor:",result);
             alert('Gasto Guardado');
             setFormData({
-                idUsuario: 1, categoria_id: 1, descripcion: '', monto: 0, fecha: new Date().toISOString().split('T')[0]
+                idUsuario: 1, categoria_id: 1, descripcion: '', monto:'', fecha: new Date().toISOString().split('T')[0]
             })
         }catch(error){
             console.error("Error:",error)
             alert('Error: ' + error.message);
         }
     }
-    
+    console.log('Datos enviados:', JSON.stringify(formData, null, 2));
+
+
     if (!data) return
     
     return(
@@ -61,6 +64,7 @@ export default function NewGasto(){
                                     value={formData.descripcion}
                                     name="descripcion"
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
@@ -75,6 +79,8 @@ export default function NewGasto(){
                                     value={formData.monto}
                                     name="monto"
                                     onChange={handleChange}
+                                    required
+                                    min="1"   
                                 />
                             </div>
                         </div>
@@ -87,7 +93,7 @@ export default function NewGasto(){
                                     value={formData.categoria_id}
                                     name="categoria_id"
                                     required
-                                onChange={handleChange}>
+                                    onChange={handleChange}>
                                 {data.slice(1).map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
                             </select>
                         </div>
@@ -99,11 +105,12 @@ export default function NewGasto(){
                             </label>
                             <div className="relative">
                                 <input
-                                    className="w-full h-14 pl-12 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl appearance-none cursor-pointer"
+                                    className="w-full h-14 pl-10 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl "
                                     type="date"
                                     value={formData.fecha}
+                                    name="fecha"
                                     onChange={handleChange}
-                                    defaultValue={new Date().toISOString().split('T')[0]} //fehca de hoy por default
+                                    //fehca 
                                 />
                             </div>
                         </div>
