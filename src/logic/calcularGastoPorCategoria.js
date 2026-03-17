@@ -1,9 +1,4 @@
-export const calcularGastoPorCategoria = (gastos) => {//calcular el gasto por cada categoria
-    if (!gastos || gastos.length === 0) return 0;
-    let totalCategoria = 0;
-    gastos.forEach(gastos => {
-        totalCategoria += gastos.monto
-    })
-    //console.log('gatocategoria',totalCategoria)
-    return totalCategoria;
-}
+export const calcularTotalGastos = (data) => {
+    if (!data || data.length === 0) return 0;
+    return data.reduce((total, gasto) => total + Number(gasto.monto), 0);
+};
