@@ -1,9 +1,9 @@
 
 import Nav from "../components/Nav";
 import { useState } from 'react';
-import { useData, usePost } from "../hook/useData";
+import { usePost } from "../hook/useData";
 export default function NewGasto(){
-    const data=useData();
+    ///const categorias = useData('ListaCategoriasServlet');
     const postData=usePost();
 
     const  [formData,setFormData]=useState({
@@ -40,8 +40,6 @@ export default function NewGasto(){
     }
     console.log('Datos enviados:', JSON.stringify(formData, null, 2));
 
-
-    if (!data) return
     
     return(
         <>
@@ -94,7 +92,12 @@ export default function NewGasto(){
                                     name="categoria_id"
                                     required
                                     onChange={handleChange}>
-                                {data.slice(1).map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
+                                    <option value="">Selecciona...</option>
+                                    <option value="2">Arriendo</option>
+                                    <option value="3">Comida</option>
+                                    <option value="4">Servicios</option>
+                                    <option value="5">Transporte</option>
+                                    <option value="6">Entretenimiento</option>
                             </select>
                         </div>
 
