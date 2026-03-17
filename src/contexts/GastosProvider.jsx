@@ -17,11 +17,11 @@ export function GastosProvider ({children}){
     }
 
     const CATEGORIAS_PREDEFINIDAS = [  // ← TU CÓDIGO EXACTO
-        { id: 2, nombre: 'Arriendo' },
+        { id: 2, nombre: 'Ocio' },
         { id: 3, nombre: 'Comida' },
         { id: 4, nombre: 'Servicios' },
         { id: 5, nombre: 'Transporte' },
-        { id: 6, nombre: 'Entretenimiento' }
+        { id: 6, nombre: 'Hogar' }
     ];
 
     const categoriasConGastos = CATEGORIAS_PREDEFINIDAS.map(categoria => {

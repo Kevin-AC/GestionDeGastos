@@ -74,7 +74,7 @@ export default function NewGasto(){
                                     className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     type="number"
                                     placeholder="$ 2.200"
-                                    value={formData.monto}
+                                    value={formData.monto || ''}
                                     name="monto"
                                     onChange={handleChange}
                                     required
@@ -93,11 +93,11 @@ export default function NewGasto(){
                                     required
                                     onChange={handleChange}>
                                     <option value="">Selecciona...</option>
-                                    <option value="2">Arriendo</option>
+                                    <option value="2">Ocio</option>
                                     <option value="3">Comida</option>
                                     <option value="4">Servicios</option>
                                     <option value="5">Transporte</option>
-                                    <option value="6">Entretenimiento</option>
+                                    <option value="6">Hogar</option>
                             </select>
                         </div>
 
