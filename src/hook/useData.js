@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
-import { mockData } from '../mock/dataMock';
-
-const API_URL ='http://localhost:8080/GestorGastos'
+//import { mockData } from '../mock/dataMock';
+const API_URL = '/GestorGastos';  // ← SIN http://localhost:8080
 export const useData=(endpoint)=>{
-    const [data,setData]= useState(mockData)
+    const [data,setData]= useState(null)
 
     useEffect(() => {
+        //console.log('🔄 Hook ejecutándose para:', endpoint); 
         if(endpoint){
+            //console.log('🚀 Fetch a:', `${API_URL}/${endpoint}`);
             fetch(`${API_URL}/${endpoint}`)
-                .then(res=>res.json())
-                .then(setData);
+                .then(res => {
+                    console.log('📡 Response status:', res.status, res.ok);
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    return res.json();
+                })
+                .then(recibidos => {  // ← 'recibidos' son los datos reales
+                   //console.log('✅ Datos recibidos:', recibidos);  // ← AQUÍ
+                    setData(recibidos);
+                })
         }
     }, [endpoint])
     return data;
