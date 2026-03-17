@@ -8,13 +8,10 @@ export const GastosContext = createContext();
 
 export function GastosProvider ({children}){
     
-    const data = useData('ListaGastosServlet');
+    const {data,refetch} = useData('ListaGastosServlet');
     
 
-    if (!data) {
-       
-        return children;
-    }
+    if(!data)return children
 
     const CATEGORIAS_PREDEFINIDAS = [  // ← TU CÓDIGO EXACTO
         { id: 2, nombre: 'Ocio' },
@@ -46,6 +43,7 @@ export function GastosProvider ({children}){
         <GastosContext.Provider value={{
             categoriasConGastos,
             totalGeneral,
+            refetchGastos:refetch
         }}>
             {children}
         </GastosContext.Provider>

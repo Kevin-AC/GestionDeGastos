@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 const API_URL = '/GestorGastos';  // ← SIN http://localhost:8080
 export const useData=(endpoint)=>{
     const [data,setData]= useState(null)
+    const [trigger,setTrigger]= useState(0);
 
     useEffect(() => {
         //console.log('🔄 Hook ejecutándose para:', endpoint); 
@@ -19,8 +20,10 @@ export const useData=(endpoint)=>{
                     setData(recibidos);
                 })
         }
-    }, [endpoint])
-    return data;
+       
+    }, [endpoint,trigger])
+    const refetch = () => setTrigger(prev => prev + 1);//actualuar el fetch mostar nuevos registros
+    return {data,refetch};
 };
 export const usePost = () => {
     const postData = async (endpoint, formData) => {

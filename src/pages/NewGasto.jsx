@@ -1,9 +1,11 @@
-
+import { useContext } from "react";
+import { GastosContext } from "../contexts/GastosProvider";
 import Nav from "../components/Nav";
 import { useState } from 'react';
 import { usePost } from "../hook/useData";
+
 export default function NewGasto(){
-    ///const categorias = useData('ListaCategoriasServlet');
+    const { refetchGastos } = useContext(GastosContext);
     const postData=usePost();
 
     const  [formData,setFormData]=useState({
@@ -24,10 +26,12 @@ export default function NewGasto(){
 
     const handleSubmit= async (e)=>{//capturar datos del cada input 
         e.preventDefault();
+
         console.log(formData.fecha)
 
         try{
             const result = await postData('TransaccionServlet',formData);
+            await refetchGastos();//recargar informacion 
             console.log("Respuesta del servidor:",result);
             alert('Gasto Guardado');
             setFormData({
