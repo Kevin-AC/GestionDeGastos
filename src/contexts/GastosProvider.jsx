@@ -28,6 +28,7 @@ export function GastosProvider ({children}){
         const gastosCategoria = data.filter(g => g.categoria_id === categoria.id);//optener objeto con elementos por categoria
         
         const totalCategoria = calcularTotalGastos(gastosCategoria);//total de cada categoria
+        //console.log('totalCategoria',totalCategoria)
         const cantidadGastos = gastosCategoria.length;//cantidad de elementos en cada categoria
 
         return {
@@ -41,19 +42,10 @@ export function GastosProvider ({children}){
 
     const totalGeneral = calcularTotalGastos(data);
     
-
-    const gastosPorCategorias = categoriasConGastos.map(cat => ({
-        nombre: cat.nombre,
-        gastos: cat.gastos
-    }));
-   
-
-    
     return(
         <GastosContext.Provider value={{
             categoriasConGastos,
             totalGeneral,
-            gastosPorCategorias
         }}>
             {children}
         </GastosContext.Provider>
