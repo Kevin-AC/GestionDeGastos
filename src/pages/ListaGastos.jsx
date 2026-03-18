@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';
 import { useDelete } from '../hook/useData';
+
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 
@@ -16,11 +17,12 @@ export default function ListaGastos(){
     const categoriaId = location.state?.categoriaId; //recibir el ID de la categoria 
 
     const categoriaSeleccionada = categoriasConGastos?.find(categoria => categoria.id === categoriaId);
+    console.log(categoriaSeleccionada)// json de categoria seleccionada
     const gastosCategoria=categoriaSeleccionada?.gastos || [];
     const nombreCategoria=categoriaSeleccionada?.nombre 
 
     const handleDelete = async(idTransaccion)=>{
-        console.log("hola")
+       // console.log("hola")
         if(!confirm(`Eliminar "${gastosCategoria.find(gasto=>gasto.idTransaccion===idTransaccion)?.descripcion}"?`)) return;
         try {
             await deleteGasto('TransaccionServlet', idTransaccion,1);
@@ -28,11 +30,9 @@ export default function ListaGastos(){
         } catch (error) {
             alert('❌ Error: ' + error.message);
         }
-        console.log('test', idTransaccion)
+        //console.log('test', idTransaccion)
     }
 
-    
-   
 
     return(
         <section>
@@ -65,11 +65,13 @@ export default function ListaGastos(){
                         gastosCategoria.map((gastos) =>
                             <CardGasto
                                 key={gastos.idTransaccion}
+                                gasto={gastos}
                                 nombre={gastos.descripcion}
                                 fecha={gastos.fecha}
                                 valor={gastos.monto}
                                 idGasto={gastos.idTransaccion}
                                 onDelete={handleDelete}
+                                
                             />
                         )
                     ) 

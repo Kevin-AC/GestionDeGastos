@@ -1,22 +1,60 @@
-import { useContext } from "react";
+import { useContext} from "react";
 import { GastosContext } from "../contexts/GastosProvider";
-import { useState } from 'react';
+import { useState} from 'react';
 import { usePost } from "../hook/useData";
+import { useLocation } from "react-router-dom";
 import Nav from "../components/Nav";
+
 
 
 export default function NewGasto(){
     const context = useContext(GastosContext);  // Verboso OK
     const { refetchGastos } = context || {};
     const postData=usePost();
+    const location = useLocation();
 
-    const  [formData,setFormData]=useState({
-        idUsuario:1,
-        categoria_id:1,
-        descripcion:'',
-        monto:'',
-        fecha: new Date().toISOString().split('T')[0] 
-    })
+    const gastoParaEditar = location.state?.gastoParaEditar;
+    const modo = location.state?.modo || 'insertar';
+
+    console.log('🧪 DEBUG NewGasto:', {
+        locationState: location.state,
+        gastoParaEditar,
+        modo
+    });
+
+    const datosIniciales = {
+        idUsuario: 1,
+        categoria_id: 1,
+        descripcion: '',
+        monto: '',
+        fecha: new Date().toISOString().split('T')[0]
+    };
+    //const  [formData,setFormData]=useState(datosIniciales)
+
+    const [formData, setFormData] = useState(() => {
+        if (gastoParaEditar) {
+            return {
+                idTransaccion: gastoParaEditar.idTransaccion,
+                idUsuario: gastoParaEditar.idUsuario || 1,
+                categoria_id: gastoParaEditar.categoria_id,
+                descripcion: gastoParaEditar.descripcion || '',
+                monto: gastoParaEditar.monto?.toString() || '',
+                fecha: gastoParaEditar.fecha?.split('T')[0] || new Date().toISOString().split('T')[0]
+            };
+        }
+        return {
+            idUsuario: 1,
+            categoria_id: 1,
+            descripcion: '',
+            monto: '',
+            fecha: new Date().toISOString().split('T')[0]
+        };
+    });
+
+
+
+
+
 
     const handleChange=(e)=>{
         
@@ -32,29 +70,41 @@ export default function NewGasto(){
         console.log(formData.fecha)
 
         try{
-            const result = await postData('TransaccionServlet',formData);
-            console.log(result)
+            const result = await postData('TransaccionServlet',{...formData,accion:modo});
             await refetchGastos();//recargar informacion 
             console.log("Respuesta del servidor:",result);
-            alert('Gasto Guardado');
-            setFormData({
-                idUsuario: 1, categoria_id: 1, descripcion: '', monto:'', fecha: new Date().toISOString().split('T')[0]
-            })
+            if (modo ==='insertar'){
+                alert('Gasto Guardado');
+            }else{
+                alert('Actualizando Gasto');
+            }
+            
+            setFormData(datosIniciales)
         }catch(error){
             console.error("Error:",error)
             alert('Error: ' + error.message);
         }
     }
     console.log('Datos enviados:', JSON.stringify(formData, null, 2));
+    const TituloDeFormulario=(modo)=>{
+        let titulo=''
+        if (modo === 'actualizar') {
+            titulo = 'Actualizar Gasto'
+        } else {
+            titulo = 'Agregar Nuevo Gasto'
+        }
+        return titulo
+    }
 
-    
+   
+
     return(
         <>
         <Nav/>
             <main className="grid place-content-center h-screen">
                 <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl font-black text-gray-900 mb-2">Agregar Nuevo Gasto</h2>
+                        <h2 className="text-3xl font-black text-gray-900 mb-2">{TituloDeFormulario(modo)}</h2>
                         <div className="w-20 h-1 bg-Verde mx-auto rounded-full shadow-md"></div>
                     </div>
 
@@ -131,7 +181,7 @@ export default function NewGasto(){
                             className="w-full h-14 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-lg uppercase tracking-wide rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-200 border-2 border-Verde/50"
                             
                         >
-                            Guardar Gasto
+                            Guardar
                         </button>
                     </form>
                 </section>
