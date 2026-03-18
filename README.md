@@ -1,16 +1,67 @@
-# React + Vite
+# 📊 Gestor de Gastos - React + Vite + JavaScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web completa para **controlar gastos e ingresos** con backend **Java Servlets + MySQL**.
 
-Currently, two official plugins are available:
+## 🚀 Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Gestión de Gastos**: Agregar, editar, eliminar, filtrar por categoría
+- **Gestión de Ingresos**: Registro completo con fechas
+- **Dashboard**: Tarjetas por categoría con totales en tiempo real
+- **Persistencia**: MySQL + Servlets (TransaccionServlet)
+- **Actualización automática**: Sin refresh manual (useData + refetch)
 
-## React Compiler
+## 🏗️ Stack Tecnológico
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+**Frontend:**
+- React 18 + Vite (HMR)
+- React Router DOM
+- Tailwind CSS (custom)
+- Context API
+- Custom Hooks (useData, usePost, useDelete)
 
-## Expanding the ESLint configuration
+**Backend:**
+- Java Servlets
+- MySQL Database
+- Tomcat Server
+- DAO Pattern
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🌐 Repositorios
+
+**Frontend (este repo):** `gestor-gastos-frontend`
+
+**Backend:** [https://github.com/Kevin-AC/GestionGastosBackend.git](https://github.com/Kevin-AC/GestionGastosBackend.git)
+
+> **¡Importante!** Frontend y Backend son **proyectos separados**
+
+## 🚀 Guía de Inicio Rápido
+
+### 1. Frontend (React + Vite)
+
+```bash
+# Clonar repo
+git clone https://github.com/tu-usuario/gestor-gastos-frontend.git
+cd gestor-gastos-frontend
+
+# Instalar dependencias
+npm install
+
+# Ejecutar desarrollo
+npm run dev
+
+### 2. Backend (Java + Tomcat)
+```
+2. Backend (Java + Tomcat)
+```bash
+# Clonar repo backend (NUEVA TERMINAL)
+git clone https://github.com/Kevin-AC/GestionGastosBackend.git
+cd gestor-gastos-backend
+
+# Compilar WAR
+mvn clean package
+
+# Copiar WAR a Tomcat
+cp target/gestor-gastos.war $TOMCAT_HOME/webapps/
+
+# Iniciar Tomcat
+$TOMCAT_HOME/bin/startup.sh
+```
