@@ -1,5 +1,27 @@
+import { useState } from "react";
 import Nav from "../components/Nav";
 export default function NewIngreso(){
+    const[formData, setFormData] = useState({
+        idUsuario: 1,
+        categoria_id: 1,
+        descripcion: '',
+        monto: '',
+        fecha: new Date().toISOString().split('T')[0]
+    });
+    const handleChange=(e)=>{
+        const{name,value}=e.target;
+        setFormData(prev => ({
+            ...prev, [name]: name === 'monto' ? parseFloat(value) || '' : value
+        }));
+    }
+
+    const handleSubmit= async (e)=>{
+        e.preventDefault();
+        console.log('📤 Datos enviados:', formData);
+    
+    }
+
+    
     return(
         <>
             <Nav/>
@@ -10,14 +32,17 @@ export default function NewIngreso(){
                                     <div className="w-20 h-1 bg-Verde mx-auto rounded-full shadow-md"></div>
                                 </div>
             
-                                <form className="space-y-6">
+                                <form className="space-y-6" onSubmit={handleSubmit}>
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Nombre</label>
                                         <div className="relative">
                                             <input
                                                 className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                                 type="text"
-                                                placeholder="Cocacola"
+                                                name="descripcion"   
+                                                value={formData.descripcion}
+                                                placeholder="Describa el monto"
+                                                onChange={handleChange}
                                                 
                                             />
                                         </div>
@@ -29,8 +54,10 @@ export default function NewIngreso(){
                                             <input
                                                 className="w-full h-14 pl-2 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-2xl font-bold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl"
                                                 type="number"
-                                                placeholder="$ 2.200"
-                                                
+                                                name="monto"
+                                                value={formData.monto}
+                                                placeholder="$ 2.200.000"
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -42,9 +69,9 @@ export default function NewIngreso(){
                                             <input
                                                 className="w-full h-14 pl-12 pr-4 bg-Neutral/70 border-2 border-Neutral-2/50 rounded-2xl text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-Verde/50 focus:border-Verde/70 transition-all duration-200 shadow-lg hover:shadow-xl appearance-none cursor-pointer"
                                                 type="date"
-                                                value={''}
-                                                
-                                                defaultValue={new Date().toISOString().split('T')[0]} //fehca de hoy por default
+                                                name="fecha"
+                                                value={formData.fecha}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -53,7 +80,6 @@ export default function NewIngreso(){
                                     <button
                                         type="submit"
                                         className="w-full h-14 bg-Verde hover:bg-Verde/90 active:scale-95 text-white font-bold text-lg uppercase tracking-wide rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-200 border-2 border-Verde/50"
-                                        onClick={''}//enviar los datos capturados en cada input
                                     >
                                         Guardar
                                     </button>
