@@ -1,13 +1,15 @@
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';
+import { useDelete } from '../hook/useData';
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 
 export default function ListaGastos(){
     const context = useContext(GastosContext);  // Verboso OK
+    const deleteGasto = useDelete();
     const location = useLocation();
-    const { categoriasConGastos } = context || {};
+    const { categoriasConGastos,refetchGastos } = context || {};
 
     if (!categoriasConGastos) return
 
@@ -16,6 +18,21 @@ export default function ListaGastos(){
     const categoriaSeleccionada = categoriasConGastos?.find(categoria => categoria.id === categoriaId);
     const gastosCategoria=categoriaSeleccionada?.gastos || [];
     const nombreCategoria=categoriaSeleccionada?.nombre 
+
+    const handleDelete = async(idTransaccion)=>{
+        console.log("hola")
+        if(!confirm(`Eliminar "${gastosCategoria.find(gasto=>gasto.idTransaccion===idTransaccion)?.descripcion}"?`)) return;
+        try {
+            await deleteGasto('TransaccionServlet', idTransaccion,1);
+            await refetchGastos();;
+        } catch (error) {
+            alert('❌ Error: ' + error.message);
+        }
+        console.log('test', idTransaccion)
+    }
+
+    
+   
 
     return(
         <section>
@@ -41,14 +58,22 @@ export default function ListaGastos(){
                         <div className="h-full bg-Verde rounded-full" style={{ width: '3%' }} />
                     </div>
                 </div>
-                {gastosCategoria.map((gastos)=>
-                    <CardGasto
-                        key={gastos.id}
-                        nombre={gastos.descripcion}
-                        fecha={gastos.fecha}
-                        valor={gastos.monto}
-                    />
-                )}             
+                { gastosCategoria.length === 0?(
+                    <p className="text-center text-gray-500 py-12">No hay gastos en esta categoría</p>
+                ):
+                    (
+                        gastosCategoria.map((gastos) =>
+                            <CardGasto
+                                key={gastos.idTransaccion}
+                                nombre={gastos.descripcion}
+                                fecha={gastos.fecha}
+                                valor={gastos.monto}
+                                idGasto={gastos.idTransaccion}
+                                onDelete={handleDelete}
+                            />
+                        )
+                    ) 
+                }           
 
             </div>
 
