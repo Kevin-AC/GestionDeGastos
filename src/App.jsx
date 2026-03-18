@@ -6,6 +6,7 @@ import Nav from "./components/Nav.jsx";
 function App() {
   const context = useContext(GastosContext); 
   const { categoriasConGastos, totalGeneral } = context || {};
+  //console.log(categoriasConGastos)
   if (!categoriasConGastos)return
   return (
     <main className='h-screen overflow-hidden'>
