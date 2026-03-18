@@ -85,18 +85,7 @@ export default function NewGasto(){
             alert('Error: ' + error.message);
         }
     }
-    console.log('Datos enviados:', JSON.stringify(formData, null, 2));
-    const TituloDeFormulario=(modo)=>{
-        let titulo=''
-        if (modo === 'actualizar') {
-            titulo = 'Actualizar Gasto'
-        } else {
-            titulo = 'Agregar Nuevo Gasto'
-        }
-        return titulo
-    }
-
-   
+    console.log('Datos enviados:', JSON.stringify(formData, null, 2));   
 
     return(
         <>
@@ -104,7 +93,7 @@ export default function NewGasto(){
             <main className="grid place-content-center h-screen">
                 <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl font-black text-gray-900 mb-2">{TituloDeFormulario(modo)}</h2>
+                        <h2 className="text-3xl font-black text-gray-900 mb-2">{modo === 'actualizar' ? 'Actualizar Gasto' : 'Agregar Nuevo Gasto'}</h2>
                         <div className="w-20 h-1 bg-Verde mx-auto rounded-full shadow-md"></div>
                     </div>
 
