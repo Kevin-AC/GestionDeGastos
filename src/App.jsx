@@ -8,7 +8,7 @@ function App() {
   const { categoriasConGastos, totalGeneral } = context || {};
   if (!categoriasConGastos)return
   return (
-    <main>
+    <main className='h-screen overflow-hidden'>
       <Nav/>
       <section className="flex">
         <div className="w-1/3 h-screen">
@@ -29,7 +29,7 @@ function App() {
           </section>
         </div>
 
-        <div className="py-10 max-w-2/3 flex flex-wrap gap-5  ">
+        <div className="mt-14 h-2/3 grid grid-cols-3 gap-10 ">
           {categoriasConGastos.map((categoria) => (//renderizar dinamicamente cada card desde el data
             <CardCategoria
               key={categoria.id}

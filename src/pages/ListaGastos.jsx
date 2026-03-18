@@ -35,7 +35,7 @@ export default function ListaGastos(){
 
 
     return(
-        <section>
+        <section className='h-screen overflow-hidden'>
             <Nav/>
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 <div className="p-6 bg-linear-to-r from-gray-50 to-Neutral-1/50 backdrop-blur-sm rounded-3xl shadow-xl border border-Neutral-2/30 hover:shadow-2xl transition-all">

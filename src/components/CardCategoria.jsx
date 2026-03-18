@@ -4,7 +4,7 @@ export default function Card({ nombre,valorP,valorG,catId}) {
     
  
     return (
-        <div className="w-80 h-96 p-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-xl border border-Neutral-2/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 space-y-4">
+        <div className="w-80 h-auto p-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-xl border border-Neutral-2/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 space-y-4">
             <h2 className="text-2xl font-black text-gray-900 leading-tight">{nombre}</h2>
 
             <div className="space-y-3">
