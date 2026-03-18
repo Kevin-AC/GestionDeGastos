@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { GastosContext } from './contexts/GastosProvider';
 import Nav from "./components/Nav.jsx";
 function App() {
-  const context = useContext(GastosContext);  // Verboso OK
+  const context = useContext(GastosContext); 
   const { categoriasConGastos, totalGeneral } = context || {};
   if (!categoriasConGastos)return
   return (

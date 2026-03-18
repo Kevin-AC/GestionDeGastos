@@ -7,7 +7,7 @@ import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 
 export default function ListaGastos(){
-    const context = useContext(GastosContext);  // Verboso OK
+    const context = useContext(GastosContext);  
     const deleteGasto = useDelete();
     const location = useLocation();
     const { categoriasConGastos,refetchGastos } = context || {};
@@ -17,7 +17,7 @@ export default function ListaGastos(){
     const categoriaId = location.state?.categoriaId; //recibir el ID de la categoria 
 
     const categoriaSeleccionada = categoriasConGastos?.find(categoria => categoria.id === categoriaId);
-    console.log(categoriaSeleccionada)// json de categoria seleccionada
+    console.log('Gastos',categoriaSeleccionada)// json de categoria seleccionada
     const gastosCategoria=categoriaSeleccionada?.gastos || [];
     const nombreCategoria=categoriaSeleccionada?.nombre 
 
@@ -46,11 +46,11 @@ export default function ListaGastos(){
                             </div>
                             <div>
                                 <h3 className="text-xl font-black text-gray-900">{nombreCategoria}</h3>
-                                <p className="text-sm text-gray-600">3 gastos</p>
+                                <p className="text-sm text-gray-600">{categoriaSeleccionada.cantidad} gastos</p>
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-2xl font-bold text-gray-900">${''}</p>
+                            <p className="text-2xl font-bold text-gray-900">${categoriaSeleccionada.total.toLocaleString()}</p>
                             <p className="text-sm text-gray-500">3.0% del presupuesto</p>
                         </div>
                     </div>
