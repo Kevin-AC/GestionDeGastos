@@ -24,7 +24,7 @@ function App() {
 
             <div className="space-y-1 p-6  bg-Neutral/70 backdrop-blur-md rounded-2xl border border-Neutral-2/50  shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
               <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Total Gastos</h2>
-              <p className="text-3xl font-black text-gray-900">${totalGeneral}</p>
+              <p className="text-3xl font-black text-gray-900">${totalGeneral.toLocaleString()}</p>
             </div>
           </section>
         </div>

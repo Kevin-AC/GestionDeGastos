@@ -15,7 +15,7 @@ export default function Card({ nombre,valorP,valorG,catId}) {
 
                 <div className="p-4 bg-Verde/5 backdrop-blur-sm rounded-2xl border border-Verde/20">
                     <p className="text-sm text-Verde font-semibold uppercase tracking-wide">Gastado</p>
-                    <p className="text-2xl font-black text-gray-900">${valorG}</p>
+                    <p className="text-2xl font-black text-gray-900">${valorG.toLocaleString()}</p>
                 </div>
             </div>
 

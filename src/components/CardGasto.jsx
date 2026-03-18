@@ -7,7 +7,7 @@ export default function CardGasto({nombre,fecha,valor}){
                     <p className="text-sm text-gray-600 mt-1">{fecha}</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-black text-red-600">{valor}</p>
+                    <p className="text-2xl font-black text-red-600">{valor.toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all ml-4">
                     <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl">✏️</button>
