@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import Nav from "./components/Nav.jsx";
 function App() {
   const context = useContext(GastosContext); 
-  const { categoriasConGastos, totalGeneral, totalIngresos,balance} = context || {};
-  console.log(totalIngresos)
+  const { categoriasConGastos, totalGeneral,balance} = context || {};
+
   if (!categoriasConGastos)return
   return (
     <main className='h-screen overflow-hidden'>
@@ -19,15 +19,22 @@ function App() {
               {'Kevin'}
             </h1>
 
-            <div className="space-y-1 mb-8 p-6 bg-Verde/10 backdrop-blur-md rounded-2xl border  border-Verde/30 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
-              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Saldo Disponible</h2>
-              <p className="text-3xl font-black text-gray-900">${balance.toLocaleString()}</p>
-              <Link to='/listaIngresos'>
-                <button className="w-16 mt-2 font-semibold text-gray-700 bg-Verde/45 hover:bg-white active:scale-95 rounded-2xl shadow-lg hover:shadow-xl hover:cursor-pointer transition-all duration-200 border border-Neutral-2/50">
+            <div className="space-y-1 mb-8 p-6 bg-Verde/10 backdrop-blur-md rounded-2xl border border-Verde/30 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                Saldo Disponible
+              </h2>
+              <div className="flex items-baseline justify-between">
+                <p className="text-3xl font-black text-gray-900">
+                  ${balance.toLocaleString()}
+                </p>
+                <Link to="/listaIngresos" className="ml-4">
+                  <button className="px-4 py-1.5 text-sm font-semibold text-gray-700 bg-Verde/45 hover:bg-white active:scale-95 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
                     ver
-                </button>
-              </Link>
+                  </button>
+                </Link>
+              </div>
             </div>
+
 
             <div className="space-y-1 p-6  bg-Neutral/70 backdrop-blur-md rounded-2xl border border-Neutral-2/50  shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
               <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Total Gastos</h2>

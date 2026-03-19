@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
+import { Toaster, toast } from 'sonner'
 import { GastosContext } from '../contexts/GastosProvider';
 import { useDelete } from '../hook/useData';
 
@@ -22,20 +23,35 @@ export default function ListaGastos(){
     const nombreCategoria=categoriaSeleccionada?.nombre 
 
     const handleDelete = async(idTransaccion)=>{
-       // console.log("hola")
-        if(!confirm(`Eliminar "${gastosCategoria.find(gasto=>gasto.idTransaccion===idTransaccion)?.descripcion}"?`)) return;
-        try {
-            await deleteGasto('TransaccionServlet', idTransaccion,1);
-            await refetchGastos();;
-        } catch (error) {
-            alert('❌ Error: ' + error.message);
-        }
-        //console.log('test', idTransaccion)
+        const gasto = gastosCategoria.find(
+            (gasto) => gasto.idTransaccion === idTransaccion
+        );
+        
+        toast.warning(`¿Eliminar "${gasto?.descripcion}"?`, {
+            duration: Infinity,
+            action: {
+                label: "Eliminar",
+                onClick: async () => {
+                    try {
+                        await deleteGasto("TransaccionServlet", idTransaccion, 1);
+                        toast.success("Registro eliminado", {
+                            description: `Gasto: "${gasto.descripcion}"`,
+                        });
+                        await refetchGastos();
+                    } catch (error) {
+                        toast.error("Error al eliminar", {
+                            description: error.message,
+                        });
+                    }
+                },
+            },
+        });
     }
 
 
     return(
         <section className='h-screen'>
+            <Toaster position="top-center" richColors closeButton />
             <Nav/>
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 <div className="p-6 bg-linear-to-r from-gray-50 to-Neutral-1/50 backdrop-blur-sm rounded-3xl shadow-xl border border-Neutral-2/30 hover:shadow-2xl transition-all">

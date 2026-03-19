@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useContext } from "react";
+import { Toaster, toast } from 'sonner'
 import { GastosContext } from "../contexts/GastosProvider";
 import { usePost } from "../hook/useData";
 import Nav from "../components/Nav";
@@ -35,7 +36,9 @@ export default function NewIngreso() {
             })
             console.log('Ingreso Guardado');
             refetchGastos();
-            alert('Ingreso Registrado');
+            toast.success('Ingreso Registrado', {
+                description: `Fecha: ${formData.fecha}`,
+            })
             setFormData({ //limpiar registro
                 idUsuario: 1,
                 categoria_id: 1,
@@ -44,7 +47,7 @@ export default function NewIngreso() {
                 fecha: new Date().toISOString().split('T')[0]
             })
         }catch(error){
-            alert('❌ Error: ' + error.message);
+            toast.error('Error: ' + error.message);
         }
 
     }
@@ -52,6 +55,7 @@ export default function NewIngreso() {
 
     return (
         <main className="h-screen overflow-hidden">
+            <Toaster position="top-center" richColors closeButton />
             <Nav />
             <div className="grid place-content-center h-full">
                 <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">
@@ -71,6 +75,7 @@ export default function NewIngreso() {
                                     value={formData.descripcion}
                                     placeholder="Describa el monto"
                                     onChange={handleChange}
+                                    required
 
                                 />
                             </div>
@@ -86,6 +91,7 @@ export default function NewIngreso() {
                                     value={formData.monto}
                                     placeholder="$ 2.200.000"
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
@@ -100,6 +106,7 @@ export default function NewIngreso() {
                                     name="fecha"
                                     value={formData.fecha}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>

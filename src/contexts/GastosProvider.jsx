@@ -43,7 +43,7 @@ export function GastosProvider ({children}){
     const ingresos = ingresosData.filter(gasto => gasto.categoria_id === 1);
     const totalIngresos = calcularTotalGastos(ingresos)
     const balance = totalIngresos - totalGeneral
-    console.log(ingresos)
+   
     return(
         <GastosContext.Provider value={{
             categoriasConGastos,

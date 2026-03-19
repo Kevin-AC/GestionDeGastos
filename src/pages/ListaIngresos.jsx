@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';  
+import { Toaster, toast } from 'sonner'
 import { useDelete } from '../hook/useData';
 import CardIngreso from "../components/CardIngreso"; 
 import Nav from "../components/Nav";
@@ -12,19 +13,33 @@ export default function ListaIngresos() {
     if (!ingresos) return <div>Cargando...</div>;
 
     const handleDelete = async (idTransaccion) => {
-        if (!confirm(`Eliminar "${ingresos.find(ingreso => ingreso.idTransaccion === idTransaccion)?.descripcion}"?`))
-            return;
-
-        try {
-            await deleteIngreso('TransaccionServlet', idTransaccion, 1);
-            await refetchGastos();  
-        } catch (error) {
-            alert('❌ Error: ' + error.message);
-        }
+        const ingreso = ingresos.find((ingreso) => ingreso.idTransaccion === idTransaccion)
+        
+        toast.warning(`Eliminar "${ingreso?.descripcion}"?`,{
+            duration:Infinity,
+            action:{
+                label:"Eliminar",
+                onClick:async ()=>{
+                    try {
+                        await deleteIngreso('TransaccionServlet', idTransaccion, 1);
+                        toast.success("Registro eliminado", {
+                            description: `ingreso: "${ingreso.descripcion}"`,
+                        });
+                        await refetchGastos();
+                    } catch (error) {
+                        toast.error("Error al eliminar", {
+                            description: error.message,
+                        });
+                    }
+                }
+            }
+        })
+       
     };
 
     return (
         <section className='min-h-screen'>
+            <Toaster position="top-center" richColors closeButton />
             <Nav />
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 {/* Header Ingresos */}
