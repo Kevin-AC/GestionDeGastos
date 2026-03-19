@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { useContext } from "react";
+import { GastosContext } from "../contexts/GastosProvider";
+import { usePost } from "../hook/useData";
 import Nav from "../components/Nav";
 export default function NewIngreso() {
+     const context = useContext(GastosContext)
+    const { refetchGastos } = context || {};
     const [formData, setFormData] = useState({
         idUsuario: 1,
         categoria_id: 1,
@@ -8,6 +13,9 @@ export default function NewIngreso() {
         monto: '',
         fecha: new Date().toISOString().split('T')[0]
     });
+
+    const postData = usePost();
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -18,6 +26,26 @@ export default function NewIngreso() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('📤 Datos enviados:', formData);
+
+        try{
+            
+            await postData('TransaccionServlet',{
+                accion:'insertar',
+                ...formData
+            })
+            console.log('Ingreso Guardado');
+            refetchGastos();
+            alert('Ingreso Registrado');
+            setFormData({ //limpiar registro
+                idUsuario: 1,
+                categoria_id: 1,
+                descripcion: '',
+                monto: '',
+                fecha: new Date().toISOString().split('T')[0]
+            })
+        }catch(error){
+            alert('❌ Error: ' + error.message);
+        }
 
     }
 
