@@ -1,3 +1,4 @@
+import { Toaster, toast } from 'sonner'
 import { useContext} from "react";
 import { GastosContext } from "../contexts/GastosProvider";
 import { useState} from 'react';
@@ -74,15 +75,16 @@ export default function NewGasto(){
             await refetchGastos();//recargar informacion 
             console.log("Respuesta del servidor:",result);
             if (modo ==='insertar'){
-                alert('Gasto Guardado');
+                toast.success('Gasto guardado correctamente');
+
             }else{
-                alert('Actualizando Gasto');
+                toast.success('Gasto actualizado correctamente');
             }
             
             setFormData(datosIniciales)
         }catch(error){
             console.error("Error:",error)
-            alert('Error: ' + error.message);
+            toast.error('Error: ' + error.message);
         }
     }
     console.log('Datos enviados:', JSON.stringify(formData, null, 2));   
@@ -90,6 +92,7 @@ export default function NewGasto(){
     return(
        
             <main className="h-screen overflow-hidden">
+            <Toaster position="top-center" />
                 <Nav />
                 <div className="h-full grid place-content-center">
                     <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">
