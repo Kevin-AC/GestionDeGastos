@@ -24,7 +24,7 @@ export default function ListaIngresos() {
     };
 
     return (
-        <section className='h-screen overflow-hidden'>
+        <section className='min-h-screen'>
             <Nav />
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 {/* Header Ingresos */}
@@ -44,7 +44,7 @@ export default function ListaIngresos() {
                         </div>
                     </div>
                     <div className="h-2 bg-Neutral-2/50 rounded-full overflow-hidden">
-                        <div className="h-full bg-Azul rounded-full" style={{ width: '100%' }} />
+                        <div className="h-full bg-amber-300 rounded-full" style={{ width: '100%' }} />
                     </div>
                 </div>
 
