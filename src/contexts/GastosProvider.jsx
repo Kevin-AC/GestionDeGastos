@@ -23,7 +23,7 @@ export function GastosProvider ({children}){
 
     const categoriasConGastos = CATEGORIAS_PREDEFINIDAS.map(categoria => {
         const gastosCategoria = data.filter(g => g.categoria_id === categoria.id);//optener objeto con elementos por categoria
-        
+        //console.log(gastosCategoria)
         const totalCategoria = calcularTotalGastos(gastosCategoria);//total de cada categoria
         //console.log('totalCategoria',totalCategoria)
         const cantidadGastos = gastosCategoria.length;//cantidad de elementos en cada categoria
