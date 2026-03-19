@@ -8,10 +8,10 @@ export const GastosContext = createContext();
 
 export function GastosProvider ({children}){
     
-    const {data,refetch} = useData('ListaGastosServlet');
-    
+    const { data: gastosData, refetch: refetchGastos } = useData('ListaGastosServlet');
+    const { data: ingresosData, refetch: refetchIngresos } = useData('ListaIngresosServlet')
 
-    if(!data)return children
+    if (!gastosData || !ingresosData) return children;
 
     const CATEGORIAS_PREDEFINIDAS = [  // ← TU CÓDIGO EXACTO
         { id: 2, nombre: 'Ocio' },
@@ -22,7 +22,7 @@ export function GastosProvider ({children}){
     ];
 
     const categoriasConGastos = CATEGORIAS_PREDEFINIDAS.map(categoria => {
-        const gastosCategoria = data.filter(g => g.categoria_id === categoria.id);//optener objeto con elementos por categoria
+        const gastosCategoria = gastosData.filter(g => g.categoria_id === categoria.id);//optener objeto con elementos por categoria
         //console.log(gastosCategoria)
         const totalCategoria = calcularTotalGastos(gastosCategoria);//total de cada categoria
         //console.log('totalCategoria',totalCategoria)
@@ -37,13 +37,24 @@ export function GastosProvider ({children}){
         };
     });
 
-    const totalGeneral = calcularTotalGastos(data);
-    
+    const totalGeneral = calcularTotalGastos(gastosData);
+
+    //Ingresos
+    const ingresos = ingresosData.filter(gasto => gasto.categoria_id === 1);
+    const totalIngresos = calcularTotalGastos(ingresos)
+    const balance = totalIngresos - totalGeneral
+    console.log(ingresos)
     return(
         <GastosContext.Provider value={{
             categoriasConGastos,
             totalGeneral,
-            refetchGastos:refetch
+            totalIngresos,
+            balance,
+            ingresos,
+            refetchGastos: () => {
+                refetchGastos();
+                refetchIngresos();
+            }
         }}>
             {children}
         </GastosContext.Provider>
