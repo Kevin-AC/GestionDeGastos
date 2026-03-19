@@ -42,7 +42,7 @@ export default function Estadistica() {
             tooltip: { trigger: 'item' },
             legend: { top: '5%', left: 'center' },
             series: [{
-                name: 'Gastos Categoria',
+                name: 'Total',
                 type: 'pie',
                 radius: ['40%', '70%'],
                 center: ['50%', '70%'],
@@ -82,9 +82,10 @@ export default function Estadistica() {
     return (
         <main>
             <Nav />
-            <section className="flex gap-3">
+            <section className="flex justify-center mt-12">
                 {/* Pie Chart */}
                 <div className="flex-1" style={{ minWidth: '400px' }}>
+                    <p className="text-center text-xl font-bold">Gastos por Categorias</p>
                     <div ref={pieRef} style={{ width: '100%', height: 700 }} />
                 </div>
                 {/* Bar Chart */}
