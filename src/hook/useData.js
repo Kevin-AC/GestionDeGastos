@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 //import { mockData } from '../mock/dataMock';
-const API_URL = '/GestorGastos';  // ← SIN http://localhost:8080
+const API_URL = '/GestorGastos';  //url  ← SIN http://localhost:8080
 export const useData=(endpoint)=>{
     const [data,setData]= useState(null)
     const [trigger,setTrigger]= useState(0);
@@ -16,13 +16,13 @@ export const useData=(endpoint)=>{
                     return res.json();
                 })
                 .then(recibidos => {  // ← 'recibidos' son los datos reales
-                   //console.log('✅ Datos recibidos:', recibidos);  // ← AQUÍ
+                   //console.log('✅ Datos recibidos:', recibidos); 
                     setData(recibidos);
                 })
         }
        
     }, [endpoint,trigger])
-    const refetch = () => setTrigger(prev => prev + 1);//actualuar el fetch mostar nuevos registros
+    const refetch = () => setTrigger(prev => prev + 1);//actualizar el fetch mostar nuevos registros
     return {data,refetch};
 };
 export const usePost = () => {

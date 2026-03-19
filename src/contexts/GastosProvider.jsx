@@ -13,7 +13,7 @@ export function GastosProvider ({children}){
 
     if (!gastosData || !ingresosData) return children;
 
-    const CATEGORIAS_PREDEFINIDAS = [  // ← TU CÓDIGO EXACTO
+    const CATEGORIAS_PREDEFINIDAS = [  
         { id: 2, nombre: 'Ocio' },
         { id: 3, nombre: 'Comida' },
         { id: 4, nombre: 'Servicios' },

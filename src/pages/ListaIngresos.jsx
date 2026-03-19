@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { GastosContext } from '../contexts/GastosProvider';  // ✅ Context
+import { GastosContext } from '../contexts/GastosProvider';  
 import { useDelete } from '../hook/useData';
-import CardIngreso from "../components/CardIngreso";  // ✅ Nuevo card
+import CardIngreso from "../components/CardIngreso"; 
 import Nav from "../components/Nav";
 
 export default function ListaIngresos() {
@@ -17,7 +17,7 @@ export default function ListaIngresos() {
 
         try {
             await deleteIngreso('TransaccionServlet', idTransaccion, 1);
-            await refetchGastos();  // ✅ Refetch ambos
+            await refetchGastos();  
         } catch (error) {
             alert('❌ Error: ' + error.message);
         }
