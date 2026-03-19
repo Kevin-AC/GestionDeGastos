@@ -51,11 +51,11 @@ export default function ListaGastos(){
                         </div>
                         <div className="text-right">
                             <p className="text-2xl font-bold text-gray-900">${categoriaSeleccionada.total.toLocaleString()}</p>
-                            <p className="text-sm text-gray-500">3.0% del presupuesto</p>
+                            {/* <p className="text-sm text-gray-500">3.0% del presupuesto</p> */}
                         </div>
                     </div>
                     <div className="h-2 bg-Neutral-2/50 rounded-full overflow-hidden">
-                        <div className="h-full bg-Verde rounded-full" style={{ width: '3%' }} />
+                        <div className="h-full bg-Verde rounded-full" style={{ width: '100%' }} />
                     </div>
                 </div>
                 { gastosCategoria.length === 0?(

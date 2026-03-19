@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Card({ nombre,valorP,valorG,catId}) {
+export default function Card({ nombre,valorG,catId}) {
     
  
     return (
@@ -8,10 +8,10 @@ export default function Card({ nombre,valorP,valorG,catId}) {
             <h2 className="text-2xl font-black text-gray-900 leading-tight">{nombre}</h2>
 
             <div className="space-y-3">
-                <div className="p-4 bg-Neutral/60 backdrop-blur-sm rounded-2xl border border-Neutral-2/30">
+                {/* <div className="p-4 bg-Neutral/60 backdrop-blur-sm rounded-2xl border border-Neutral-2/30">
                     <p className="text-sm text-gray-600 font-medium uppercase tracking-wide">Presupuesto</p>
                     <p className="text-2xl font-black text-gray-900">${valorP}</p>
-                </div>
+                </div> */}
 
                 <div className="p-4 bg-Verde/5 backdrop-blur-sm rounded-2xl border border-Verde/20">
                     <p className="text-sm text-Verde font-semibold uppercase tracking-wide">Gastado</p>
