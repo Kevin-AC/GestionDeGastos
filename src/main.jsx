@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -11,20 +11,33 @@ import {GastosProvider } from './contexts/GastosProvider.jsx';
 import NewIngreso from './pages/NewIngreso.jsx';
 import Estadistica from './pages/Estadistica.jsx';
 import ListaIngresos from './pages/ListaIngresos.jsx';
+import { AuthProvider, AuthContext } from './contexts/AuthPrivider.jsx';
+import { useContext } from "react";
+// PrivateRoute como componente que consume AuthContext
+// eslint-disable-next-line react-refresh/only-export-components
+function PrivateRoute({ children }) {
+  const { user } = useContext(AuthContext);
+  return user ? children : <Navigate to="/login" replace />;
+}
 createRoot(document.getElementById('root')).render(
+
   <BrowserRouter>
-   <GastosProvider>
-      <Routes>
-        <Route path='/' element={<App/>} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/newGasto' element={<NewGasto />} />
-        <Route path='/listaGastos' element={<ListaGastos />} />
-        <Route path='/listaIngresos' element={<ListaIngresos />} />
-        <Route path='/registro' element={<RegistroUsuario/>}/>
-        <Route path='/newIngreso' element={<NewIngreso/>}/>
-        <Route path='/estadistica' element={<Estadistica/>}/>
-      </Routes>
-    </GastosProvider>
+  <AuthProvider>
+      <GastosProvider>
+        <Routes>
+          <Route path="/" element={<PrivateRoute><App /></PrivateRoute>} />
+          <Route path='/login' element={<Login />} />
+          <Route path="/newGasto" element={<PrivateRoute><NewGasto /></PrivateRoute>} />
+          <Route path="/listaGastos" element={<PrivateRoute><ListaGastos /></PrivateRoute>} />
+          <Route path="/listaIngresos" element={<PrivateRoute><ListaIngresos /></PrivateRoute>} />
+          <Route path="/newIngreso" element={<PrivateRoute><NewIngreso /></PrivateRoute>} />
+          <Route path='/registro' element={<RegistroUsuario />} />
+          <Route path="/estadistica" element={<PrivateRoute><Estadistica /></PrivateRoute>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </GastosProvider>
+  </AuthProvider>
+   
   </BrowserRouter>
   
 )
