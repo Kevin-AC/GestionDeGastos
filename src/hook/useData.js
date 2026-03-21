@@ -75,14 +75,15 @@ export const useDelete=()=>{
     const deleteData = async (endpoint, idTransaccion, idUsuario = 1) => {
         const response = await fetch(`${API_URL}/${endpoint}?id=${idTransaccion}`, {//error
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(
-                {
-                    accion:'eliminar',
-                    idTransaccion,
-                    idUsuario
-                }
-            )
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                accion: 'eliminar',
+                idTransaccion,
+                idUsuario
+            })
         })
         if(!response.ok){
             throw new Error('Error al eliminar')
