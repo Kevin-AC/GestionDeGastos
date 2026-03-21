@@ -52,11 +52,6 @@ export default function NewGasto(){
         };
     });
 
-
-
-
-
-
     const handleChange=(e)=>{
         
         const {name,value}=e.target;

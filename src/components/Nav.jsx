@@ -1,8 +1,9 @@
 
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthPrivider';
+import { Toaster, toast } from 'sonner'
 
 export default function Nav() {
     const { user, setUser } = useContext(AuthContext);
@@ -78,12 +79,12 @@ export default function Nav() {
                 localStorage.removeItem('user');
             } else {
                 const txt = await res.text().catch(() => 'Error');
-                alert('Error cerrando sesión: ' + txt);
                 
+                toast.error('Error cerrando sesión: ' + txt)
             }
         } catch (err) {
             console.error(err);
-            alert('Error de red al cerrar sesión');
+            toast.error('Error cerrando sesión: ')
         } finally {
             setLoading(false);
             setOpenUserMenu(false);
@@ -109,11 +110,13 @@ export default function Nav() {
                 setUser(updated);
                 localStorage.setItem('user', JSON.stringify(updated));
             } else {
-                alert((json && json.message) ? json.message : 'Error al actualizar');
+                //alert((json && json.message) ? json.message : 'Error al actualizar');
+                toast.error((json && json.message) ? json.message : 'Error al actualizar')
             }
         } catch (err) {
             console.error(err);
-            alert('Error de red al actualizar');
+            //alert('Error de red al actualizar');
+            toast.error('Error de red al actualizar')
         } finally {
             setLoading(false);
             setOpenUserMenu(false);
@@ -121,31 +124,51 @@ export default function Nav() {
     }
 
     async function handleDeleteAccount() {
-        if (!user) return alert('No autenticado');
-        if (!confirm('¿Eliminar tu cuenta? Esta acción no se puede deshacer.')) return;
-        setLoading(true);
-        try {
-            const res = await fetch('/GestorGastos/UsuarioServlet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ accion: 'eliminar', idUsuario: user.id })
-            });
-            const json = await res.json().catch(() => null);
-            if (res.ok && json && json.success) {
-                setUser(null);
-                localStorage.removeItem('user');
-                alert(json.message || 'Cuenta eliminada');
-            } else {
-                alert((json && json.message) ? json.message : 'Error al eliminar cuenta');
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Error de red al eliminar cuenta');
-        } finally {
-            setLoading(false);
-            setOpenUserMenu(false);
+        if (!user) {
+            toast.error('No autenticado');
+            return;
         }
+
+        toast.warning(`¿Eliminar tu cuenta "${user?.nombre || ''}"?`, {
+            duration: Infinity,
+            action: {
+                label: "Eliminar",
+                onClick: async () => {
+                    setLoading(true);
+                    console.log("USER:", user);
+                    console.log("ID:", user?.id);
+                    try {
+                        const res = await fetch('/GestorGastos/UsuarioServlet', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ accion: 'eliminar', idUsuario: user.id })
+                        });
+
+                        const json = await res.json().catch(() => null);
+
+                        if (res.ok && json && json.success) {
+                            setUser(null);
+                            localStorage.removeItem('user');
+
+                            toast.success(json.message || 'Cuenta eliminada');
+                        } else {
+                            toast.error(
+                                (json && json.message)
+                                    ? json.message
+                                    : 'Error al eliminar cuenta'
+                            );
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        toast.error('Error de red al eliminar cuenta');
+                    } finally {
+                        setLoading(false);
+                        setOpenUserMenu(false);
+                    }
+                },
+            },
+        });
     }
 
     function Portal({ children, coords }) {
@@ -177,7 +200,7 @@ export default function Nav() {
 
     return (
         <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex items-center relative z-[9999]">
-            {/* Logo */}
+            <Toaster position="top-center" richColors closeButton />
             <div className="flex items-center mr-6">
                 <Link to="/" className="text-2xl font-extrabold text-gray-800">MiGestorFinann</Link>
             </div>
