@@ -24,10 +24,10 @@ export default function Login() {
                 credentials: "include"
                 
             });
-            console.log({
-                correo: identificador,
-                password: password
-            });
+            // console.log({
+            //     correo: identificador,
+            //     password: password
+            // });
 
             // Intentar parsear JSON de respuesta
             let data = null;
@@ -35,11 +35,11 @@ export default function Login() {
 
             if (res.ok && data && data.success && data.user) {
                 // Actualizar contexto global y localStorage
-                const userNormalizado = {// organizar estructura del los datos de usuario
-                    idUsuario:data.user.id,
-                    id:data.user.id,
-                    nombre:data.user.nombre,
-                    correo:data.user.correo
+                const userNormalizado = {
+                    idUsuario: data.user.idUsuario || data.user.id, 
+                    nombre: data.user.nombre,
+                    apellido: data.user.apellido,
+                    correo: data.user.correo
                 };
                 setUser(userNormalizado);
                 localStorage.setItem("user", JSON.stringify(userNormalizado));

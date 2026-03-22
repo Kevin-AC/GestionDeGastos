@@ -9,7 +9,7 @@ function App() {
   const { user} = useContext(AuthContext);
   const context = useContext(GastosContext); 
   const { categoriasConGastos, totalGeneral,balance} = context || {};
-
+  //console.log(user)
   if (!categoriasConGastos)return
   return (
     <main className='h-screen overflow-hidden'>
