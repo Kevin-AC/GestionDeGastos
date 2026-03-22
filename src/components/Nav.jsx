@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import { useState, useContext, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -65,30 +66,37 @@ export default function Nav() {
     }
 
     async function handleLogout() {
-        if (!confirm('¿Cerrar sesión?')) return;
-        setLoading(true);
-        try {
-            const res = await fetch('/GestorGastos/UsuarioServlet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ accion: 'logout' })
-            });
-            if (res.ok) {
-                setUser(null);
-                localStorage.removeItem('user');
-            } else {
-                const txt = await res.text().catch(() => 'Error');
-                
-                toast.error('Error cerrando sesión: ' + txt)
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error('Error cerrando sesión: ')
-        } finally {
-            setLoading(false);
-            setOpenUserMenu(false);
-        }
+        toast.warning('¿Cerrar sesión?', {
+            duration: Infinity,
+            action: {
+                label: 'Salir',
+                onClick: async () => {
+                    setLoading(true);
+                    try {
+                        const res = await fetch('/GestorGastos/UsuarioServlet', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ accion: 'logout' })
+                        });
+
+                        if (res.ok) {
+                            setUser(null);
+                            localStorage.removeItem('user');
+                            toast.success('Sesión cerrada');
+                        } else {
+                            const txt = await res.text().catch(() => 'Error');
+                            toast.error('Error: ' + txt);
+                        }
+                    } catch (e) {
+                        toast.error('Error de red');
+                    } finally {
+                        setLoading(false);
+                        setOpenUserMenu(false);
+                    }
+                }
+            },
+        });
     }
 
     async function handleEditAccount() {

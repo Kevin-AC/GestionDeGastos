@@ -1,8 +1,11 @@
 import  {useState } from 'react';
 import { usePost } from '../hook/useData';
+import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from 'sonner'
+import { Link } from 'react-router-dom';
 
 export default function RegistroUsuario() {
-    //const data = useData('UsuarioServlet');
+    const navigate = useNavigate();
     const postData= usePost()
    
     const [formData, setFormData] = useState({
@@ -23,25 +26,29 @@ export default function RegistroUsuario() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            // 
-            try {
-                const result = await postData('UsuarioServlet', formData);
-                    console.log('✅ Registro:', result);
-                alert('Usuario registrado exitosamente');
-                setFormData({ nombre: '', apellido: '', telefono: '', correo: '', contrasena: '' });
-            } catch (error) {
-                alert('Error: ' + error.message);
+        
+        const registerPromise = postData('UsuarioServlet', formData);
+        toast.promise(registerPromise, {
+            loading: 'Creando cuenta...',
+            success: (data) => {
+                console.log(data);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1700);  // pequeño delay para animación
+
+                return '¡Usuario registrado exitosamente!';
+            },
+            error: (error) => {
+                console.error('❌ Error:', error);
+                return 'Error: ' + error.message;
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error de conexión al servidor');
-        }
+        });
     };
 
 
     return (
         <main className="grid place-content-center h-screen">
+            <Toaster position="top-center" richColors closeButton />
             <section className="w-auto h-auto py-5 px-12 flex flex-col items-center gap-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-Neutral-2/50">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Formulario de Registro</h2>
                 <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
@@ -105,12 +112,20 @@ export default function RegistroUsuario() {
                             required
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="mt-4 w-full h-12 px-6 bg-Verde text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-Verde/90 focus:outline-none focus:ring-4 focus:ring-Verde/50 transition-all duration-200"
-                    >
-                        Enviar
-                    </button>
+                   <div className='w-full h-auto flex flex-col gap-4 items-center'>
+                        <button
+                            type="submit"
+                            className="mt-4 w-full h-12 px-6 bg-Verde text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-Verde/90 focus:outline-none focus:ring-4 focus:ring-Verde/50 transition-all duration-200"
+                        >
+                            Enviar
+                        </button>
+                        <Link
+                            to="/login"
+                            className=" text-Verde hover:text-Verde/80 font-semibold transition-colors flex items-center gap-1 text-sm"
+                        >
+                            Volver al Login
+                        </Link>
+                   </div>
                 </form>
             </section>
         </main>
