@@ -20,8 +20,13 @@ export default function Login() {
             const res = await fetch("http://localhost:8080/GestorGastos/LoginServlet", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ correo: identificador, password }),
+                body: JSON.stringify({ identificador: identificador, password }),
                 credentials: "include"
+                
+            });
+            console.log({
+                correo: identificador,
+                password: password
             });
 
             // Intentar parsear JSON de respuesta

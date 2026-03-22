@@ -18,7 +18,7 @@ export default function ListaGastos(){
     const categoriaId = location.state?.categoriaId; //recibir el ID de la categoria 
 
     const categoriaSeleccionada = categoriasConGastos?.find(categoria => categoria.id === categoriaId);
-    console.log('Gastos',categoriaSeleccionada)// json de categoria seleccionada
+    //console.log('Gastos',categoriaSeleccionada)// json de categoria seleccionada
     const gastosCategoria=categoriaSeleccionada?.gastos || [];
     const nombreCategoria=categoriaSeleccionada?.nombre 
 

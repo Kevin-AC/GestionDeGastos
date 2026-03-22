@@ -10,9 +10,9 @@ import Nav from "../components/Nav";
 
 
 export default function NewGasto(){
-    const authContext = useContext(AuthContext);
-    const {user}=authContext;
-    console.log('🔑 AuthContext user:', user); 
+    const { user } = useContext(AuthContext);
+ 
+
     const context = useContext(GastosContext); 
     const { refetchGastos } = context || {};
 
@@ -68,9 +68,8 @@ export default function NewGasto(){
         
 
         try{
-            const result = await postData('TransaccionServlet',{...formData,accion:modo});
+            await postData('TransaccionServlet',{...formData,accion:modo});
             await refetchGastos();//recargar informacion 
-            console.log("Respuesta del servidor:",result);
             if (modo ==='insertar'){
                 toast.success('Gasto guardado correctamente');
 

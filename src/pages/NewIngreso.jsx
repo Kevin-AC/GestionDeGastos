@@ -2,13 +2,19 @@ import { useState } from "react";
 import { useContext } from "react";
 import { Toaster, toast } from 'sonner'
 import { GastosContext } from "../contexts/GastosProvider";
+import { AuthContext } from "../contexts/AuthPrivider";
 import { usePost } from "../hook/useData";
 import Nav from "../components/Nav";
 export default function NewIngreso() {
-     const context = useContext(GastosContext)
+    const { user } = useContext(AuthContext);
+
+    const context = useContext(GastosContext)
     const { refetchGastos } = context || {};
+
+    const userID = user?.id || user?.idUsuario || 1; //almacenar id de usuario del context
+
     const [formData, setFormData] = useState({
-        idUsuario: 1,
+        idUsuario: userID,
         categoria_id: 1,
         descripcion: '',
         monto: '',
