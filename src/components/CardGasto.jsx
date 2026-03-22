@@ -4,7 +4,7 @@ export default function CardGasto({ gasto,nombre, fecha, valor, idGasto, onDelet
     
     return(
         <article className="group bg-white/70 backdrop-blur-sm p-5 rounded-2xl shadow-lg border border-Neutral-2/30 hover:shadow-2xl hover:-translate-y-1 transition-all">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex justify-between items-center gap-4">
                 <div className="flex-1">
                     <h4 className="font-bold text-gray-900 text-lg">{nombre}</h4>
                     <p className="text-sm text-gray-600 mt-1">{fecha}</p>
@@ -15,12 +15,12 @@ export default function CardGasto({ gasto,nombre, fecha, valor, idGasto, onDelet
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all ml-4">
                     <Link to={'/newGasto'} state={{ gastoParaEditar: gasto ,modo:'actualizar'}}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl">
-                        ✏️
+                        <ion-icon size="large" name="create-outline"></ion-icon>
                     </Link>
                     <button 
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-xl"
+                        className="p-2 text-red-500  hover:bg-red-50 rounded-xl cursor-pointer"
                         onClick={() => onDelete(idGasto)}
-                        >🗑️</button>
+                    ><ion-icon size="large" name="trash-outline"></ion-icon></button>
                 </div>
             </div>
         </article>

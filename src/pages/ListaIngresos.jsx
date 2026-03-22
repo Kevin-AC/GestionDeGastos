@@ -47,7 +47,7 @@ export default function ListaIngresos() {
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-amber-300/20 border-2 border-amber-800/40 flex items-center justify-center">
-                                <span className="text-xl font-bold text-Azul">💰</span>
+                                <span className="text-xl font-bold text-Azul"><ion-icon size="large" name="cash-outline"></ion-icon></span>
                             </div>
                             <div>
                                 <h3 className="text-xl font-black text-gray-900">Ingresos</h3>

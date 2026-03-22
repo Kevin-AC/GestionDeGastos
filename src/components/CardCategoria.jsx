@@ -21,12 +21,12 @@ export default function Card({ nombre,valorG,catId}) {
 
             <div className="flex gap-3 pt-2">
                 <Link to='/newGasto'>
-                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-white bg-Verde hover:bg-Verde/90 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Verde/50">
+                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-white cursor-pointer bg-Verde hover:bg-Verde/90 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Verde/50">
                         Agregar
                     </button>
                 </Link>
                 <Link to='/listaGastos' state={{ categoriaId: catId }}>
-                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-gray-700 bg-Neutral hover:bg-Neutral/80 active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
+                    <button className="flex-1 h-10 px-4 text-sm font-semibold text-gray-700 bg-Neutral hover:bg-Neutral/80 cursor-pointer active:scale-95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
                         Ver
                     </button>
                </Link>

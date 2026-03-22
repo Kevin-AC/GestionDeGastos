@@ -4,7 +4,7 @@ export default function CardIngreso({ nombre, fecha, valor, idIngreso, onDelete 
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-linear-to-br from-Azul to-Azul/80 rounded-xl flex items-center justify-center">
-                        <span className="text-xl text-white font-bold">💰</span>
+                        <span className="text-2xl text-Verde font-extrabold">$</span>
                     </div>
                     <div>
                         <h4 className="font-bold text-gray-900">{nombre}</h4>
@@ -17,7 +17,7 @@ export default function CardIngreso({ nombre, fecha, valor, idIngreso, onDelete 
                         onClick={() => onDelete(idIngreso)}
                         className="mt-2 px-4 py-1 bg-Rojo/90 text-red-700 font-bold hover:text-red-500 hover:cursor-pointer text-sm rounded-lg hover:bg-Rojo transition-colors"
                     >
-                        Eliminar
+                        <ion-icon size="large" name="trash-outline"></ion-icon>
                     </button>
                 </div>
             </div>
