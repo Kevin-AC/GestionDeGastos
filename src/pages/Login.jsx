@@ -86,7 +86,7 @@ export default function Login() {
                         <input
                             value={identificador}
                             onChange={(e) => setIdentificador(e.target.value)}
-                            className="w-full h-12 px-4 bg-Neutral/70 border rounded-xl"
+                            className="w-full h-12 px-4 bg-Neutral/70 border border-Verde/20 rounded-xl focus:outline-none focus:border-Verde focus:border-2 focus:ring-2 focus:ring-Verde/50 transition-all duration-200 ease-in-out placeholder:text-gray-500"
                             type="text"
                             placeholder="Ingresa tu correo o nombre"
                             required
@@ -98,7 +98,7 @@ export default function Login() {
                         <input
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full h-12 px-4 bg-Neutral/70 border rounded-xl"
+                            className="w-full h-12 px-4 bg-Neutral/70 border border-Verde/20 rounded-xl focus:outline-none focus:border-Verde focus:border-2 focus:ring-2 focus:ring-Verde/50 transition-all duration-200 ease-in-out placeholder:text-gray-500"
                             type="password"
                             placeholder="Ingresa tu contraseña"
                             required
