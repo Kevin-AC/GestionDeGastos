@@ -1,79 +1,83 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthPrivider";
+import { toast } from 'sonner'
 
 export default function Login() {
     const [identificador, setIdentificador] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const { setUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    async function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
 
-        try {
-            const res = await fetch("http://localhost:8080/GestorGastos/LoginServlet", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ identificador: identificador, password }),
-                credentials: "include"
-                
-            });
-            // console.log({
-            //     correo: identificador,
-            //     password: password
-            // });
+        const loginPromise = fetch("http://localhost:8080/GestorGastos/LoginServlet", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ identificador, password }),
+            credentials: "include"
+        })
+            .then(async (res) => {
+                let data = null;
+                try { data = await res.json(); } catch { data = null; }
 
-            // Intentar parsear JSON de respuesta
-            let data = null;
-            try { data = await res.json(); } catch { data = null; }
+                // Simula mínimo 1.5s loading
+                await new Promise(resolve => setTimeout(resolve, 1500));
 
-            if (res.ok && data && data.success && data.user) {
-                // Actualizar contexto global y localStorage
+                if (res.ok && data?.success && data?.user) {
+                    return { success: true, data };
+                }
+
+                // Errores específicos
+                if (res.status === 404) {
+                    throw new Error("Usuario no registrado");
+                }
+                if (res.status === 401) {
+                    throw new Error("Contraseña incorrecta");
+                }
+                throw new Error(data?.message || "Credenciales inválidas");
+            })
+            .catch(error => Promise.reject(error));
+
+            toast.promise(loginPromise, {
+            loading: 'Iniciando sesión...',
+            success: async (result) => {
+                // Login exitoso
                 const userNormalizado = {
-                    idUsuario: data.user.idUsuario || data.user.id, 
-                    nombre: data.user.nombre,
-                    apellido: data.user.apellido,
-                    correo: data.user.correo
+                    idUsuario: result.data.user.idUsuario || result.data.user.id,
+                    nombre: result.data.user.nombre,
+                    apellido: result.data.user.apellido,
+                    correo: result.data.user.correo
                 };
+
                 setUser(userNormalizado);
                 localStorage.setItem("user", JSON.stringify(userNormalizado));
-                // (Opcional) token si tu backend lo devuelve
-                if (data.token) localStorage.setItem("authToken", data.token);
+                if (result.data.token) {
+                    localStorage.setItem("authToken", result.data.token);
+                }
 
-                // limpiar y redirigir
+                // Limpia y redirige
                 setIdentificador("");
                 setPassword("");
-                navigate("/", { replace: true });
-                return;
-            }
 
-            // Manejo de estados específicos según backend
-            if (res.status === 404) {
-                navigate("/registro", { state: { nombre: identificador } });
-                return;
-            }
-            if (res.status === 401) {
-                setError("Contraseña incorrecta.");
-                return;
-            }
+                setTimeout(() => navigate("/", { replace: true }), 1200);
 
-            // Mensaje por defecto si no se pudo autenticar
-            const msg = (data && data.message) ? data.message : "Credenciales inválidas";
-            setError(msg);
+                return `¡Hola ${userNormalizado.nombre}!`;
+            },
+            error: (error) => {
+                // Redirige a registro si 404
+                if (error.message.includes("no registrado")) {
+                    setTimeout(() => navigate("/registro", { state: { nombre: identificador } }), 500);
+                }
+                return error.message;
+            }
+        });
+    };
 
-        } catch (err) {
-            console.error(err);
-            setError("No se pudo conectar al servidor.");
-        } finally {
-            setLoading(false);
-        }
-    }
 
     return (
         <main className="grid place-content-center h-screen">
@@ -109,8 +113,8 @@ export default function Login() {
                 {error && <p className="text-red-600">{error}</p>}
 
                 <div className="flex flex-col items-center w-full gap-4">
-                    <button type="submit" disabled={loading} className="w-full h-12 bg-Verde text-white font-bold rounded-2xl">
-                        {loading ? "Ingresando..." : "Iniciar Sesión"}
+                    <button type="submit"  className="w-full h-12 bg-Verde text-white font-bold rounded-2xl hover:bg-Verde/90 active:scale-90 transition-all duration-200">
+                        Iniciar Sesión
                     </button>
 
                     <Link to="/registro" className="text-lg font-semibold text-gray-700 hover:text-Verde hover:underline">
