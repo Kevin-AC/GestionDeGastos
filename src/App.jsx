@@ -29,11 +29,7 @@ function App() {
                 <p className="text-3xl font-black text-gray-900">
                   ${balance.toLocaleString()}
                 </p>
-                <Link to="/listaIngresos" className="ml-4">
-                  <button className="px-4 py-1.5 text-sm font-semibold text-gray-700 bg-Verde/45 hover:bg-white active:scale-95 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-Neutral-2/50">
-                    ver
-                  </button>
-                </Link>
+                
               </div>
             </div>
 
