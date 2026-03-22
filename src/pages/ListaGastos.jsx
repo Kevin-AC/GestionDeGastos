@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { GastosContext } from '../contexts/GastosProvider';
 import { useDelete } from '../hook/useData';
 
@@ -51,7 +51,7 @@ export default function ListaGastos(){
 
     return(
         <section className='h-screen'>
-            <Toaster position="top-center" richColors closeButton />
+            
             <Nav/>
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 <div className="p-6 bg-linear-to-r from-gray-50 to-Neutral-1/50 backdrop-blur-sm rounded-3xl shadow-xl border border-Neutral-2/30 hover:shadow-2xl transition-all">

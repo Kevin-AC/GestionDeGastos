@@ -13,6 +13,7 @@ import Estadistica from './pages/Estadistica.jsx';
 import ListaIngresos from './pages/ListaIngresos.jsx';
 import { AuthProvider, AuthContext } from './contexts/AuthPrivider.jsx';
 import { useContext } from "react";
+import { Toaster } from 'sonner'
 // PrivateRoute como componente que consume AuthContext
 // eslint-disable-next-line react-refresh/only-export-components
 function PrivateRoute({ children }) {
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')).render(
 
   <BrowserRouter>
   <AuthProvider>
+      <Toaster position="top-center" richColors closeButton />
       <GastosProvider>
         <Routes>
           <Route path="/" element={<PrivateRoute><App /></PrivateRoute>} />

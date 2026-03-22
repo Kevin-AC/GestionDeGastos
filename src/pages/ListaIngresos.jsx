@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';  
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { useDelete } from '../hook/useData';
 import CardIngreso from "../components/CardIngreso"; 
 import Nav from "../components/Nav";
@@ -39,7 +39,7 @@ export default function ListaIngresos() {
 
     return (
         <section className='min-h-screen'>
-            <Toaster position="top-center" richColors closeButton />
+            
             <Nav />
             <div className="p-8 max-w-4xl mx-auto space-y-6">
                 {/* Header Ingresos */}

@@ -4,7 +4,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthPrivider';
-import { Toaster, toast } from 'sonner'
+import {  toast } from 'sonner'
 
 export default function Nav() {
     const { user, setUser } = useContext(AuthContext);
@@ -208,7 +208,7 @@ export default function Nav() {
 
     return (
         <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex items-center relative z-[9999]">
-            <Toaster position="top-center" richColors closeButton />
+            
             <div className="flex items-center mr-6">
                 <Link to="/" className="text-2xl font-extrabold text-gray-800">MiGestorFinann</Link>
             </div>

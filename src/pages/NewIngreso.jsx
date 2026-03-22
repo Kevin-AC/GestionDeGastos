@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useContext } from "react";
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { GastosContext } from "../contexts/GastosProvider";
 import { AuthContext } from "../contexts/AuthPrivider";
 import { usePost } from "../hook/useData";
@@ -61,7 +61,7 @@ export default function NewIngreso() {
 
     return (
         <main className="h-screen overflow-hidden">
-            <Toaster position="top-center" richColors closeButton />
+           
             <Nav />
             <div className="grid place-content-center h-full">
                 <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">

@@ -1,7 +1,7 @@
 import  {useState } from 'react';
 import { usePost } from '../hook/useData';
 import { useNavigate } from 'react-router-dom';
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { Link } from 'react-router-dom';
 
 export default function RegistroUsuario() {
@@ -26,29 +26,33 @@ export default function RegistroUsuario() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const registerPromise = postData('UsuarioServlet', formData);
-        toast.promise(registerPromise, {
-            loading: 'Creando cuenta...',
-            success: (data) => {
-                console.log(data);
-                setTimeout(() => {
-                    navigate('/login');
-                }, 1700);  // pequeño delay para animación
 
-                return '¡Usuario registrado exitosamente!';
+        const registerPromise = postData('UsuarioServlet', formData)
+            .then(data => {
+                return new Promise(resolve => {
+                    setTimeout(() => resolve({ success: true, data }), 2000);
+                });
+            })
+            .catch(error => Promise.reject(error));
+
+        await toast.promise(registerPromise, {
+            loading: 'Creando cuenta...',
+            success: (result) => {
+                console.log('✅', result.data);
+                setTimeout(() => navigate('/login'), 1700);
+                return '¡Usuario registrado!';
             },
-            error: (error) => {
-                console.error('❌ Error:', error);
-                return 'Error: ' + error.message;
-            }
+            error: (error) => `Error: ${error.message}`
         });
     };
 
 
+
+
+
     return (
         <main className="grid place-content-center h-screen">
-            <Toaster position="top-center" richColors closeButton />
+           
             <section className="w-auto h-auto py-5 px-12 flex flex-col items-center gap-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-Neutral-2/50">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Formulario de Registro</h2>
                 <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">

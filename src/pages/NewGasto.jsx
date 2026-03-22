@@ -1,4 +1,4 @@
-import { Toaster, toast } from 'sonner'
+import {toast } from 'sonner'
 import { useContext} from "react";
 import { GastosContext } from "../contexts/GastosProvider";
 import { AuthContext } from "../contexts/AuthPrivider";
@@ -87,7 +87,7 @@ export default function NewGasto(){
     return(
        
             <main className="h-screen overflow-hidden">
-            <Toaster position="top-center" richColors closeButton />
+            
                 <Nav />
                 <div className="h-full grid place-content-center">
                     <section className="w-full max-w-md p-8 bg-Neutral-1/80 rounded-3xl shadow-2xl border border-Neutral-2/50">
