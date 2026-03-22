@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 export default function CardGasto({ gasto,nombre, fecha, valor, idGasto, onDelete }){
-    //console.log('CardGasto gasto:', gasto);
+    console.log('CardGasto gasto:', gasto);
     return(
         <article className="group bg-white/70 backdrop-blur-sm p-5 rounded-2xl shadow-lg border border-Neutral-2/30 hover:shadow-2xl hover:-translate-y-1 transition-all">
             <div className="flex items-start justify-between gap-4">

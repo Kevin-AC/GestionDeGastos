@@ -1,6 +1,7 @@
 import { Toaster, toast } from 'sonner'
 import { useContext} from "react";
 import { GastosContext } from "../contexts/GastosProvider";
+import { AuthContext } from "../contexts/AuthPrivider";
 import { useState} from 'react';
 import { usePost } from "../hook/useData";
 import { useLocation } from "react-router-dom";
@@ -9,22 +10,23 @@ import Nav from "../components/Nav";
 
 
 export default function NewGasto(){
-    const context = useContext(GastosContext);  // Verboso OK
+    const authContext = useContext(AuthContext);
+    const {user}=authContext;
+    console.log('🔑 AuthContext user:', user); 
+    const context = useContext(GastosContext); 
     const { refetchGastos } = context || {};
+
+
     const postData=usePost();
     const location = useLocation();
 
+    const userID=user?.id || user?.idUsuario || 1; //almacenar id de usuario del context
+    
     const gastoParaEditar = location.state?.gastoParaEditar;
     const modo = location.state?.modo || 'insertar';
 
-    console.log('🧪 DEBUG NewGasto:', {
-        locationState: location.state,
-        gastoParaEditar,
-        modo
-    });
-
     const datosIniciales = {
-        idUsuario: 1,
+        idUsuario: userID,
         categoria_id: 1,
         descripcion: '',
         monto: '',
@@ -36,7 +38,7 @@ export default function NewGasto(){
         if (gastoParaEditar) {
             return {
                 idTransaccion: gastoParaEditar.idTransaccion,
-                idUsuario: gastoParaEditar.idUsuario || 1,
+                idUsuario: gastoParaEditar.idUsuario || userID,
                 categoria_id: gastoParaEditar.categoria_id,
                 descripcion: gastoParaEditar.descripcion || '',
                 monto: gastoParaEditar.monto?.toString() || '',
@@ -44,7 +46,7 @@ export default function NewGasto(){
             };
         }
         return {
-            idUsuario: 1,
+            idUsuario: userID,
             categoria_id: 1,
             descripcion: '',
             monto: '',
@@ -63,7 +65,7 @@ export default function NewGasto(){
     const handleSubmit= async (e)=>{//capturar datos del cada input 
         e.preventDefault();
 
-        console.log(formData.fecha)
+        
 
         try{
             const result = await postData('TransaccionServlet',{...formData,accion:modo});
@@ -78,12 +80,11 @@ export default function NewGasto(){
             
             setFormData(datosIniciales)
         }catch(error){
-            console.error("Error:",error)
+            //console.error("Error:",error)
             toast.error('Error: ' + error.message);
         }
     }
-    console.log('Datos enviados:', JSON.stringify(formData, null, 2));   
-
+ 
     return(
        
             <main className="h-screen overflow-hidden">

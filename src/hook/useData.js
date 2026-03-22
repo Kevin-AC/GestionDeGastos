@@ -1,28 +1,38 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
-//import { mockData } from '../mock/dataMock';
-const API_URL = '/GestorGastos';  //url  ← SIN http://localhost:8080
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthPrivider';
+const API_URL = '/GestorGastos';  //url   http://localhost:8080
+
 export const useData=(endpoint)=>{
     const [data,setData]= useState(null)
     const [trigger,setTrigger]= useState(0);
+    const {user} = useContext(AuthContext);
+    const userID= user?.idUsuario || user?.id || 1 ;
+
+    //console.log('🔍 useData:', endpoint, 'userId:', userID, 'user:', user); 
+
 
     useEffect(() => {
-        //console.log('🔄 Hook ejecutándose para:', endpoint); 
-        if(endpoint){
-            console.log('🚀 Fetch a:', `${API_URL}/${endpoint}`);
-            fetch(`${API_URL}/${endpoint}`)
+        //console.log('⚡ useEffect ejecutado:', endpoint, userID);
+        if(endpoint && userID){
+            const URL = `${API_URL}/${endpoint}?idUsuario=${userID}`
+           // console.log('🚀 Fetch URL:', URL);
+            fetch(URL)
                 .then(res => {
                     console.log('📡 Response status:', res.status, res.ok);
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     return res.json();
                 })
-                .then(recibidos => {
-                   //console.log('✅ Datos recibidos:', recibidos); 
-                    setData(recibidos);
+                .then(recibidos => {setData(recibidos)})
+                .catch(error =>{
+                    console.error('❌ Fetch error:', error);
+                    setData([]); 
                 })
         }
        
-    }, [endpoint,trigger])
+    }, [endpoint,trigger,userID])
+
     const refetch = () => setTrigger(prev => prev + 1);//actualizar el fetch mostar nuevos registros
     return {data,refetch};
 };
@@ -72,8 +82,11 @@ export const usePost = () => {
 };
 
 export const useDelete=()=>{
-    const deleteData = async (endpoint, idTransaccion, idUsuario = 1) => {
-        const response = await fetch(`${API_URL}/${endpoint}?id=${idTransaccion}`, {//error
+    const {user}= useContext(AuthContext);
+    const userID = user?.idUsuario || user?.id || 1;
+
+    const deleteData = async (endpoint, idTransaccion) => {
+        const response = await fetch(`${API_URL}/${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +95,7 @@ export const useDelete=()=>{
             body: JSON.stringify({
                 accion: 'eliminar',
                 idTransaccion,
-                idUsuario
+                idUsuario:userID
             })
         })
         if(!response.ok){

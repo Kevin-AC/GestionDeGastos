@@ -8,10 +8,12 @@ export const GastosContext = createContext();
 
 export function GastosProvider ({children}){
     
-    const { data: gastosData, refetch: refetchGastos } = useData('ListaGastosServlet');
-    const { data: ingresosData, refetch: refetchIngresos } = useData('ListaIngresosServlet')
+    const { data: gastosRaw, refetch: refetchGastos } = useData('ListaGastosServlet');
+    const { data: ingresosRaw, refetch: refetchIngresos } = useData('ListaIngresosServlet');
 
-    if (!gastosData || !ingresosData) return children;
+    const gastosData = Array.isArray(gastosRaw) ? gastosRaw : [];
+    const ingresosData = Array.isArray(ingresosRaw) ? ingresosRaw : [];
+
 
     const CATEGORIAS_PREDEFINIDAS = [  
         { id: 2, nombre: 'Ocio' },
@@ -22,7 +24,7 @@ export function GastosProvider ({children}){
     ];
 
     const categoriasConGastos = CATEGORIAS_PREDEFINIDAS.map(categoria => {
-        const gastosCategoria = gastosData.filter(g => g.categoria_id === categoria.id);//optener objeto con elementos por categoria
+        const gastosCategoria = gastosData.filter(g => parseInt(g.categoria_id) === categoria.id);//optener objeto con elementos por categoria
         //console.log(gastosCategoria)
         const totalCategoria = calcularTotalGastos(gastosCategoria);//total de cada categoria
         //console.log('totalCategoria',totalCategoria)

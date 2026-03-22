@@ -30,8 +30,14 @@ export default function Login() {
 
             if (res.ok && data && data.success && data.user) {
                 // Actualizar contexto global y localStorage
-                setUser(data.user);
-                localStorage.setItem("user", JSON.stringify(data.user));
+                const userNormalizado = {// organizar estructura del los datos de usuario
+                    idUsuario:data.user.id,
+                    id:data.user.id,
+                    nombre:data.user.nombre,
+                    correo:data.user.correo
+                };
+                setUser(userNormalizado);
+                localStorage.setItem("user", JSON.stringify(userNormalizado));
                 // (Opcional) token si tu backend lo devuelve
                 if (data.token) localStorage.setItem("authToken", data.token);
 
