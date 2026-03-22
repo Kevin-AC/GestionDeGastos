@@ -102,7 +102,7 @@ export default function Nav() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ accion: 'actualizar', idUsuario: user.id, nombre: nuevoNombre })
+                body: JSON.stringify({ accion: 'actualizar', idUsuario: user.idUsuario, nombre: nuevoNombre })
             });
             const json = await res.json().catch(() => null);
             if (res.ok && json && json.success) {
@@ -135,14 +135,14 @@ export default function Nav() {
                 label: "Eliminar",
                 onClick: async () => {
                     setLoading(true);
-                    console.log("USER:", user);
-                    console.log("ID:", user?.id);
+                    console.log("USER:", user?.nombre);
+                    console.log("ID:", user?.idUsuario);
                     try {
                         const res = await fetch('/GestorGastos/UsuarioServlet', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             credentials: 'include',
-                            body: JSON.stringify({ accion: 'eliminar', idUsuario: user.id })
+                            body: JSON.stringify({ accion: 'eliminar', idUsuario: user.idUsuario })
                         });
 
                         const json = await res.json().catch(() => null);
