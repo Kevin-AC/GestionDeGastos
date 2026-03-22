@@ -15,7 +15,7 @@ export default function CardIngreso({ nombre, fecha, valor, idIngreso, onDelete 
                     <p className="text-2xl font-black text-Azul">${valor.toLocaleString()}</p>
                     <button
                         onClick={() => onDelete(idIngreso)}
-                        className="mt-2 px-4 py-1 bg-Rojo/90 text-gray-900 text-sm rounded-lg hover:bg-Rojo transition-colors"
+                        className="mt-2 px-4 py-1 bg-Rojo/90 text-red-700 font-bold hover:text-red-500 hover:cursor-pointer text-sm rounded-lg hover:bg-Rojo transition-colors"
                     >
                         Eliminar
                     </button>

@@ -41,12 +41,12 @@ export default function ListaIngresos() {
         <section className='min-h-screen'>
             
             <Nav />
-            <div className="p-8 max-w-4xl mx-auto space-y-6">
+            <div className="p-8 max-w-4xl mx-auto space-y-6 text">
                 {/* Header Ingresos */}
-                <div className="p-6 bg-linear-to-r from-Azul/10 to-Azul/20 backdrop-blur-sm rounded-3xl shadow-xl border border-Azul/30 hover:shadow-2xl transition-all">
+                <div className="p-6 bg-linear-to-r from-amber-300/10 to-amber-300/20 backdrop-blur-sm rounded-3xl shadow-xl border border-amber-800/30 hover:shadow-2xl transition-all">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-Azul/20 border-2 border-Azul/40 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-2xl bg-amber-300/20 border-2 border-amber-800/40 flex items-center justify-center">
                                 <span className="text-xl font-bold text-Azul">💰</span>
                             </div>
                             <div>

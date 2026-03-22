@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { toast } from 'sonner'
 import { GastosContext } from '../contexts/GastosProvider';
 import { useDelete } from '../hook/useData';
-
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 

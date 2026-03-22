@@ -247,6 +247,7 @@ export default function Nav() {
                                     role="menu"
                                 >
                                     <Link to="/newGasto" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar gasto</Link>
+                                    <Link to={"/listaGastosGeneral"} className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de gastos</Link>
                                 </div>
                             </Portal>
                         )}
