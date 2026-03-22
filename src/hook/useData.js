@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthPrivider';
 const API_URL = '/GestorGastos';  //url   http://localhost:8080
 
+
 export const useData=(endpoint)=>{
     const [data,setData]= useState(null)
     const [trigger,setTrigger]= useState(0);

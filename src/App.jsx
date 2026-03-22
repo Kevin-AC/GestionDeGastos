@@ -5,6 +5,7 @@ import { GastosContext } from './contexts/GastosProvider';
 import { AuthContext } from './contexts/AuthPrivider.jsx';
 import { Link } from "react-router-dom";
 import Nav from "./components/Nav.jsx";
+import NewCategoria from './components/NewCategoria.jsx';
 function App() {
   const { user} = useContext(AuthContext);
   const context = useContext(GastosContext); 
@@ -42,6 +43,7 @@ function App() {
         </div>
 
         <div className="mt-14 h-2/3 grid grid-cols-3 gap-10 ">
+       
           {categoriasConGastos.map((categoria) => (//renderizar dinamicamente cada card desde el data
             <CardCategoria
               key={categoria.id}
@@ -53,6 +55,7 @@ function App() {
 
             />
           ))}
+          {/* <NewCategoria /> */}
 
         </div>
 
