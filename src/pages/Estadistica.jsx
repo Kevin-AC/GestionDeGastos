@@ -82,7 +82,7 @@ export default function Estadistica() {
     return (
         <main>
             <Nav />
-            <section className="flex justify-center mt-12">
+            <section className="flex lg:flex-row flex-col justify-center mt-12 p-4 lg-p-0">
                 {/* Pie Chart */}
                 <div className="flex-1" style={{ minWidth: '400px' }}>
                     <p className="text-center text-xl font-bold">Gastos por Categorias</p>

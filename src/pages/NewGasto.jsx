@@ -86,7 +86,7 @@ export default function NewGasto(){
  
     return(
        
-            <main className="h-screen overflow-hidden">
+            <main className="p-4 lg:h-screen lg:overflow-hidden">
             
                 <Nav />
                 <div className="h-full grid place-content-center">

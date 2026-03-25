@@ -49,7 +49,7 @@ export default function ListaGastos(){
 
 
     return(
-        <section className='h-screen'>
+        <section className='w-auto  h-screen'>
             
             <Nav/>
             <div className="p-8 max-w-4xl mx-auto space-y-6">

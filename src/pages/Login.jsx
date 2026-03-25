@@ -80,8 +80,8 @@ export default function Login() {
 
 
     return (
-        <main className="grid place-content-center h-screen">
-            <form onSubmit={handleSubmit} className="w-125 py-6 px-10 flex flex-col items-center gap-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-Neutral-2/50">
+        <main className="w-auto p-4 grid place-content-center h-screen">
+            <form onSubmit={handleSubmit} className="max-w-125 py-6 px-10 flex flex-col items-center gap-4 bg-Neutral-1/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-Neutral-2/50">
                 <h2 className="text-4xl font-black text-gray-900">Bienvenido a MiGestor</h2>
 
                 <div className="w-full flex flex-col gap-4">

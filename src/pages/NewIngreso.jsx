@@ -60,7 +60,7 @@ export default function NewIngreso() {
 
 
     return (
-        <main className="h-screen overflow-hidden">
+        <main className="p-4 lg:h-screen lg:overflow-hidden">
            
             <Nav />
             <div className="grid place-content-center h-full">

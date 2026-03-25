@@ -7,6 +7,7 @@ import { AuthContext } from '../contexts/AuthPrivider';
 import {  toast } from 'sonner'
 
 export default function Nav() {
+    const [navOpen, setNavOpen] = useState(true);
     const { user, setUser } = useContext(AuthContext);
     const [openUserMenu, setOpenUserMenu] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -205,93 +206,97 @@ export default function Nav() {
         const top = rect.bottom + window.scrollY + 8;
         return { left, top };
     }
+    const handleLogoClick = () => {
+        setNavOpen(!navOpen); // oculta nav SOLO en mobile
+    };
 
     return (
-        <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex items-center relative z-[9999]">
-            
-            <div className="flex items-center mr-6">
-                <Link to="/" className="text-2xl font-extrabold text-gray-800">MiGestorFinann</Link>
+        <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex lg:flex-row flex-col items-center relative z-[9999] mb-12 lg:mb-0">
+            <div className="flex items-center mr-6 ">
+                <Link  onClick={handleLogoClick} className="text-2xl font-extrabold text-gray-800">MiGestorFinann</Link>
             </div>
 
-            <nav className="flex-1 flex justify-center">
-                <ul className="flex items-center gap-10">
-                    <li>
-                        <Link
-                            to="/"
-                            className="px-4 py-2 text-lg font-bold text-green-700 rounded-lg hover:bg-green-50 hover:scale-[1.02] transition-transform shadow-sm"
+            {navOpen && (
+                <nav className=" flex-1 flex  justify-center">
+                    <ul className="flex lg:flex-row flex-col items-center gap-10">
+                        <li>
+                            <Link
+                                to="/"
+                                className="px-4 py-2 text-lg font-bold text-green-700 rounded-lg hover:bg-green-50 hover:scale-[1.02] transition-transform shadow-sm"
+                            >
+                                Dashboard
+                            </Link>
+                        </li>
+
+                        {/* Gastos */}
+                        <li
+                            ref={gastosRef}
+                            className="relative"
+                            onMouseEnter={openGastosNow}
+                            onMouseLeave={closeGastosDelayed}
                         >
-                            Dashboard
-                        </Link>
-                    </li>
+                            <button
+                                onClick={() => { setOpenGastos((s) => !s); setOpenIngresos(false); }}
+                                className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                Gastos
+                            </button>
 
-                    {/* Gastos */}
-                    <li
-                        ref={gastosRef}
-                        className="relative"
-                        onMouseEnter={openGastosNow}
-                        onMouseLeave={closeGastosDelayed}
-                    >
-                        <button
-                            onClick={() => { setOpenGastos((s) => !s); setOpenIngresos(false); }}
-                            className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            {openGastos && (
+                                <Portal coords={getCoordsForRef(gastosRef)}>
+                                    <div
+                                        className="min-w-[240px] bg-white border border-gray-200 shadow-xl rounded-lg"
+                                        onMouseEnter={openGastosNow}
+                                        onMouseLeave={closeGastosDelayed}
+                                        role="menu"
+                                    >
+                                        <Link to="/newGasto" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar gasto</Link>
+                                        <Link to={"/listaGastosGeneral"} className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de gastos</Link>
+                                    </div>
+                                </Portal>
+                            )}
+                        </li>
+
+                        {/* Ingresos */}
+                        <li
+                            ref={ingresosRef}
+                            className="relative"
+                            onMouseEnter={openIngresosNow}
+                            onMouseLeave={closeIngresosDelayed}
                         >
-                            Gastos
-                        </button>
+                            <button
+                                onClick={() => { setOpenIngresos((s) => !s); setOpenGastos(false); }}
+                                className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                Ingresos
+                            </button>
 
-                        {openGastos && (
-                            <Portal coords={getCoordsForRef(gastosRef)}>
-                                <div
-                                    className="min-w-[240px] bg-white border border-gray-200 shadow-xl rounded-lg"
-                                    onMouseEnter={openGastosNow}
-                                    onMouseLeave={closeGastosDelayed}
-                                    role="menu"
-                                >
-                                    <Link to="/newGasto" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar gasto</Link>
-                                    <Link to={"/listaGastosGeneral"} className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de gastos</Link>
-                                </div>
-                            </Portal>
-                        )}
-                    </li>
+                            {openIngresos && (
+                                <Portal coords={getCoordsForRef(ingresosRef)}>
+                                    <div
+                                        className="min-w-[220px] bg-white border border-gray-200 shadow-xl rounded-lg"
+                                        onMouseEnter={openIngresosNow}
+                                        onMouseLeave={closeIngresosDelayed}
+                                        role="menu"
+                                    >
+                                        <Link to="/newIngreso" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar ingreso</Link>
+                                        <Link to="/listaIngresos" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de ingresos</Link>
+                                    </div>
+                                </Portal>
+                            )}
+                        </li>
 
-                    {/* Ingresos */}
-                    <li
-                        ref={ingresosRef}
-                        className="relative"
-                        onMouseEnter={openIngresosNow}
-                        onMouseLeave={closeIngresosDelayed}
-                    >
-                        <button
-                            onClick={() => { setOpenIngresos((s) => !s); setOpenGastos(false); }}
-                            className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                            Ingresos
-                        </button>
-
-                        {openIngresos && (
-                            <Portal coords={getCoordsForRef(ingresosRef)}>
-                                <div
-                                    className="min-w-[220px] bg-white border border-gray-200 shadow-xl rounded-lg"
-                                    onMouseEnter={openIngresosNow}
-                                    onMouseLeave={closeIngresosDelayed}
-                                    role="menu"
-                                >
-                                    <Link to="/newIngreso" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar ingreso</Link>
-                                    <Link to="/listaIngresos" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de ingresos</Link>
-                                </div>
-                            </Portal>
-                        )}
-                    </li>
-
-                    <li>
-                        <Link
-                            to="/estadistica"
-                            className="px-4 py-2 text-lg font-bold text-gray-800 rounded-lg hover:bg-gray-50 hover:scale-[1.02] transition-transform shadow-sm"
-                        >
-                            Estadística
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
+                        <li>
+                            <Link
+                                to="/estadistica"
+                                className="px-4 py-2 text-lg font-bold text-gray-800 rounded-lg hover:bg-gray-50 hover:scale-[1.02] transition-transform shadow-sm"
+                            >
+                                Estadística
+                            </Link>
+                        </li>
+                    </ul>
+                </nav>
+            )}
 
             {/* Menú usuario (derecha) */}
             <div className="ml-6 flex items-center">

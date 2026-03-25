@@ -13,11 +13,11 @@ function App() {
   //console.log(user)
   if (!categoriasConGastos)return
   return (
-    <main className='h-screen overflow-hidden'>
+    <main className='h-auto w-auto lg:h-screen lg:overflow-hidden'>
       <Nav/>
-      <section className="flex">
-        <div className="w-1/3 h-screen">
-          <section className="w-3/4 h-full px-6 py-12 bg-Neutral-1/80 backdrop-blur-xl border-r border-Neutral-2/50 shadow-lg bg-linear-to-br">
+      <section className="w-full grid place-content-center lg:flex">
+        <div className="w-full h-fit lg:w-1/3 lg:h-screen ">
+          <section className="min-w-80 lg:w-3/4 h-full px-6 py-12 bg-Neutral-1/80 backdrop-blur-xl border-r border-Neutral-2/50 shadow-lg bg-linear-to-br">
             <h1 className="text-4xl font-black text-gray-800 leading-tight mb-12">
               {`${user.nombre} ${user.apellido}`}
             </h1>
@@ -42,7 +42,7 @@ function App() {
           </section>
         </div>
 
-        <div className="mt-14 h-2/3 grid grid-cols-3 gap-10 ">
+        <div className=" mt-14 h-2/3 grid  lg:grid-cols-3 gap-10 ">
        
           {categoriasConGastos.map((categoria) => (//renderizar dinamicamente cada card desde el data
             <CardCategoria
