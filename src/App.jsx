@@ -42,7 +42,7 @@ function App() {
           </section>
         </div>
 
-        <div className=" mt-14 h-2/3 grid  lg:grid-cols-3 gap-10 ">
+        <div className=" mt-14 lg:h-2/3 grid  lg:grid-cols-3 place-content-center gap-10">
        
           {categoriasConGastos.map((categoria) => (//renderizar dinamicamente cada card desde el data
             <CardCategoria
