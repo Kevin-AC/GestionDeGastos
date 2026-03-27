@@ -1,70 +1,17 @@
 /* eslint-disable no-unused-vars */
 
-import { useState, useContext, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useContext} from 'react';
+import { Link} from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthPrivider';
 import {  toast } from 'sonner'
+import { useApi } from '../hook/useData';
 
 export default function Nav() {
-    const [navOpen, setNavOpen] = useState(true);
     const { user, setUser } = useContext(AuthContext);
+    const {post}=useApi();
+    const [navOpen, setNavOpen] = useState(true);
     const [openUserMenu, setOpenUserMenu] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    const [openGastos, setOpenGastos] = useState(false);
-    const [openIngresos, setOpenIngresos] = useState(false);
-
-    const gastosRef = useRef(null);
-    const ingresosRef = useRef(null);
-    const userMenuRef = useRef(null);
-    const hoverTimeout = useRef(null);
-
-    const location = useLocation();
-    useEffect(() => {
-        setOpenGastos(false);
-        setOpenIngresos(false);
-        setOpenUserMenu(false);
-    }, [location.pathname]);
-
-    useEffect(() => {
-        function handleOutside(e) {
-            if (gastosRef.current && !gastosRef.current.contains(e.target)) setOpenGastos(false);
-            if (ingresosRef.current && !ingresosRef.current.contains(e.target)) setOpenIngresos(false);
-            if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setOpenUserMenu(false);
-        }
-        window.addEventListener('click', handleOutside);
-        return () => window.removeEventListener('click', handleOutside);
-    }, []);
-
-    function openGastosNow() {
-        clearTimeout(hoverTimeout.current);
-        setOpenIngresos(false);
-        setOpenGastos(true);
-    }
-    function closeGastosDelayed() {
-        clearTimeout(hoverTimeout.current);
-        hoverTimeout.current = setTimeout(() => setOpenGastos(false), 120);
-    }
-
-    function openIngresosNow() {
-        clearTimeout(hoverTimeout.current);
-        setOpenGastos(false);
-        setOpenIngresos(true);
-    }
-    function closeIngresosDelayed() {
-        clearTimeout(hoverTimeout.current);
-        hoverTimeout.current = setTimeout(() => setOpenIngresos(false), 120);
-    }
-
-    function openUserNow() {
-        clearTimeout(hoverTimeout.current);
-        setOpenUserMenu(true);
-    }
-    function closeUserDelayed() {
-        clearTimeout(hoverTimeout.current);
-        hoverTimeout.current = setTimeout(() => setOpenUserMenu(false), 120);
-    }
 
     async function handleLogout() {
         toast.warning('¿Cerrar sesión?', {
@@ -74,22 +21,15 @@ export default function Nav() {
                 onClick: async () => {
                     setLoading(true);
                     try {
-                        const res = await fetch('/GestorGastos/UsuarioServlet', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'include',
-                            body: JSON.stringify({ accion: 'logout' })
-                        });
+                        await post('UsuarioServlet', {
+                            accion: 'logout'
+                        }, { includeCredentials: true })
+                        setUser(null);
+                        localStorage.removeItem('user');
 
-                        if (res.ok) {
-                            setUser(null);
-                            localStorage.removeItem('user');
-                            toast.success('Sesión cerrada');
-                        } else {
-                            const txt = await res.text().catch(() => 'Error');
-                            toast.error('Error: ' + txt);
-                        }
+                        toast.success('Sesión cerrada');
                     } catch (e) {
+                        console.error("ERROR REAL:", e);
                         toast.error('Error de red');
                     } finally {
                         setLoading(false);
@@ -107,21 +47,21 @@ export default function Nav() {
         if (nuevoNombre.trim() === '') return alert('Nombre no puede estar vacío');
         setLoading(true);
         try {
-            const res = await fetch('/GestorGastos/UsuarioServlet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ accion: 'actualizar', idUsuario: user.idUsuario, nombre: nuevoNombre })
-            });
-            const json = await res.json().catch(() => null);
-            if (res.ok && json && json.success) {
+            const res = await post('UsuarioServlet', {
+                accion: 'actualizar',
+                idUsuario: user.idUsuario,
+                nombre: nuevoNombre
+            }, { includeCredentials: true });
+
+            if (res?.success) {
                 const updated = { ...user, nombre: nuevoNombre };
                 setUser(updated);
                 localStorage.setItem('user', JSON.stringify(updated));
+                toast.success('Perfil actualizado');
             } else {
-                //alert((json && json.message) ? json.message : 'Error al actualizar');
-                toast.error((json && json.message) ? json.message : 'Error al actualizar')
+                toast.error(res?.message || 'Error al actualizar');
             }
+
         } catch (err) {
             console.error(err);
             //alert('Error de red al actualizar');
@@ -144,32 +84,22 @@ export default function Nav() {
                 label: "Eliminar",
                 onClick: async () => {
                     setLoading(true);
-                    console.log("USER:", user?.nombre);
-                    console.log("ID:", user?.idUsuario);
                     try {
-                        const res = await fetch('/GestorGastos/UsuarioServlet', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'include',
-                            body: JSON.stringify({ accion: 'eliminar', idUsuario: user.idUsuario })
-                        });
+                        const res = await post('UsuarioServlet', {
+                            accion: 'eliminar',
+                            idUsuario: user.idUsuario
+                        }, { includeCredentials: true });
 
-                        const json = await res.json().catch(() => null);
-
-                        if (res.ok && json && json.success) {
+                        if (res?.success) {
                             setUser(null);
                             localStorage.removeItem('user');
-
-                            toast.success(json.message || 'Cuenta eliminada');
+                            toast.success(res.message || 'Cuenta eliminada');
                         } else {
-                            toast.error(
-                                (json && json.message)
-                                    ? json.message
-                                    : 'Error al eliminar cuenta'
-                            );
+                            toast.error(res?.message || 'Error al eliminar');
                         }
+
                     } catch (err) {
-                        console.error(err);
+                       
                         toast.error('Error de red al eliminar cuenta');
                     } finally {
                         setLoading(false);
@@ -180,45 +110,24 @@ export default function Nav() {
         });
     }
 
-    function Portal({ children, coords }) {
-        if (typeof document === 'undefined') return null;
-        const wrapper = (
-            <div
-                style={{
-                    position: 'absolute',
-                    left: coords.left,
-                    top: coords.top,
-                    transform: 'translateX(-50%)',
-                    zIndex: 30000,
-                    pointerEvents: 'auto'
-                }}
-            >
-                {children}
-            </div>
-        );
-        return createPortal(wrapper, document.body);
-    }
-
-    function getCoordsForRef(ref) {
-        if (!ref || !ref.current) return { left: '50%', top: 0 };
-        const rect = ref.current.getBoundingClientRect();
-        const left = rect.left + rect.width / 2;
-        const top = rect.bottom + window.scrollY + 8;
-        return { left, top };
-    }
-    const handleLogoClick = () => {
-        setNavOpen(!navOpen); // oculta nav SOLO en mobile
-    };
 
     return (
-        <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex lg:flex-row flex-col items-center relative z-[9999] mb-12 lg:mb-0">
-            <div className="flex items-center mr-6 ">
-                <Link  onClick={handleLogoClick} className="text-2xl font-extrabold text-gray-800">MiGestorFinann</Link>
-            </div>
+        <header className="w-full bg-white/96 backdrop-blur-md border-b border-gray-200 px-6 py-3 flex lg:flex-row flex-col items-center relative z-50 mb-12 lg:mb-0">
+            <div className="flex items-center justify-between w-full lg:w-auto">
+                <Link to="/" className="text-2xl font-extrabold text-gray-800">
+                    MiGestorFinann
+                </Link>
 
-            {navOpen && (
-                <nav className=" flex-1 flex  justify-center">
-                    <ul className="flex lg:flex-row flex-col items-center gap-10">
+              
+                <button
+                    onClick={() => setNavOpen(prev => !prev)}
+                    className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+                >
+                    <ion-icon name="menu-outline" size={'large'}></ion-icon>
+                </button>
+            </div>
+                <nav className={`flex-1 justify-center ${navOpen ? 'flex' : 'hidden'} lg:flex`}>
+                    <ul className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10 mt-4 lg:mt-0">
                         <li>
                             <Link
                                 to="/"
@@ -229,62 +138,38 @@ export default function Nav() {
                         </li>
 
                         {/* Gastos */}
-                        <li
-                            ref={gastosRef}
-                            className="relative"
-                            onMouseEnter={openGastosNow}
-                            onMouseLeave={closeGastosDelayed}
-                        >
-                            <button
-                                onClick={() => { setOpenGastos((s) => !s); setOpenIngresos(false); }}
-                                className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                Gastos
-                            </button>
+                            <li className="relative group">
+                                <button
+                                    className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                    Gastos
+                                </button>
 
-                            {openGastos && (
-                                <Portal coords={getCoordsForRef(gastosRef)}>
-                                    <div
-                                        className="min-w-[240px] bg-white border border-gray-200 shadow-xl rounded-lg"
-                                        onMouseEnter={openGastosNow}
-                                        onMouseLeave={closeGastosDelayed}
-                                        role="menu"
-                                    >
-                                        <Link to="/newGasto" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar gasto</Link>
-                                        <Link to={"/listaGastosGeneral"} className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de gastos</Link>
-                                    </div>
-                                </Portal>
-                            )}
-                        </li>
+                                <div className="absolute left-1/2 -translate-x-1/2 mt-2 min-w-[240px] bg-white border border-gray-200 shadow-xl rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <Link to="/newGasto" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">
+                                        + Agregar gasto
+                                    </Link>
+                                    <Link to="/listaGastosGeneral" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">
+                                        Lista de gastos
+                                    </Link>
+                                </div>
+                            </li>
 
                         {/* Ingresos */}
-                        <li
-                            ref={ingresosRef}
-                            className="relative"
-                            onMouseEnter={openIngresosNow}
-                            onMouseLeave={closeIngresosDelayed}
-                        >
-                            <button
-                                onClick={() => { setOpenIngresos((s) => !s); setOpenGastos(false); }}
-                                className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                Ingresos
-                            </button>
+                            <li className="relative group">
+                                <button className="px-4 py-2 text-lg font-semibold text-gray-800 hover:text-green-700 rounded-lg hover:bg-gray-50 transition-colors">
+                                    Ingresos
+                                </button>
 
-                            {openIngresos && (
-                                <Portal coords={getCoordsForRef(ingresosRef)}>
-                                    <div
-                                        className="min-w-[220px] bg-white border border-gray-200 shadow-xl rounded-lg"
-                                        onMouseEnter={openIngresosNow}
-                                        onMouseLeave={closeIngresosDelayed}
-                                        role="menu"
-                                    >
-                                        <Link to="/newIngreso" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50"> + Agregar ingreso</Link>
-                                        <Link to="/listaIngresos" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">Lista de ingresos</Link>
-                                    </div>
-                                </Portal>
-                            )}
-                        </li>
+                                <div className="absolute left-1/2 -translate-x-1/2 mt-2 min-w-[220px] bg-white border border-gray-200 shadow-xl rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <Link to="/newIngreso" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">
+                                        + Agregar ingreso
+                                    </Link>
+                                    <Link to="/listaIngresos" className="block px-5 py-3 text-sm text-gray-800 hover:bg-green-50">
+                                        Lista de ingresos
+                                    </Link>
+                                </div>
+                            </li>
 
                         <li>
                             <Link
@@ -296,83 +181,65 @@ export default function Nav() {
                         </li>
                     </ul>
                 </nav>
-            )}
+           
 
             {/* Menú usuario (derecha) */}
-            <div className="ml-6 flex items-center">
-                <div
-                    ref={userMenuRef}
-                    className="relative"
-                    onMouseEnter={openUserNow}
-                    onMouseLeave={closeUserDelayed}
-                >
-                    {user ? (
-                        <>
-                            <div className="p-1 rounded-md border border-gray-200 bg-white shadow-sm">
+            <div className="ml-6 flex items-center relative">
+                {user ? (
+                    <>
+                        <div className="p-1 rounded-md border border-gray-200 bg-white shadow-sm">
+                            <button
+                                onClick={() => setOpenUserMenu(prev => !prev)}
+                                className="flex items-center gap-3 px-3 py-1 rounded hover:bg-gray-50"
+                            >
+                                <span className="font-extrabold text-gray-800">Hola,</span>
+                                <span className="text-amber-800 font-extrabold">{user.nombre}</span>
+
+                                <div className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-white bg-linear-to-b from-Verde to-Verde/30 shadow-2xl border-Verde border-2">
+                                    {user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                            </button>
+                        </div>
+
+                        {openUserMenu && (
+                            <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-gray-200 shadow-2xl rounded-lg z-50">
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); setOpenUserMenu((s) => !s); }}
-                                    aria-haspopup="true"
-                                    aria-expanded={openUserMenu}
-                                    className="flex items-center gap-3 px-3 py-1 rounded hover:bg-gray-50 focus:outline-none"
+                                    onClick={handleEditAccount}
+                                    disabled={loading}
+                                    className="w-full text-left px-5 py-3 hover:bg-green-50 font-semibold text-green-700"
                                 >
-                                    <span className="font-extrabold text-gray-800">Hola,</span>
-                                    <span className="text-amber-800 font-extrabold">{user.nombre}</span>
+                                    Editar perfil
+                                </button>
 
-                                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-white bg-linear-to-b from-Verde to-Verde/30 shadow-2xl border-Verde border-2"
+                                <button
+                                    onClick={handleLogout}
+                                    disabled={loading}
+                                    className="w-full text-left px-5 py-3 hover:bg-gray-50 font-semibold text-gray-800"
+                                >
+                                    Cerrar sesión
+                                </button>
 
-                                    >
-                                        {user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
-                                    </div>
+                                <div className="mx-4 my-2">
+                                    <div className="h-0.5 bg-gray-200 rounded" />
+                                </div>
+
+                                <button
+                                    onClick={handleDeleteAccount}
+                                    disabled={loading}
+                                    className="w-full text-left px-5 py-3 text-amber-800 hover:bg-red-50 font-semibold"
+                                >
+                                    Eliminar cuenta
                                 </button>
                             </div>
-
-                            {openUserMenu && (
-                                <Portal coords={{
-                                    left: userMenuRef.current ? (userMenuRef.current.getBoundingClientRect().left + userMenuRef.current.offsetWidth / 2) : window.innerWidth - 80,
-                                    top: (userMenuRef.current ? userMenuRef.current.getBoundingClientRect().bottom : 0) + window.scrollY + 8
-                                }}>
-                                    <div
-                                        className="w-52 bg-white border border-gray-200 shadow-2xl rounded-lg"
-                                        onMouseEnter={openUserNow}
-                                        onMouseLeave={closeUserDelayed}
-                                        role="menu"
-                                    >
-                                        <button
-                                            onClick={handleEditAccount}
-                                            disabled={loading}
-                                            className="w-full text-left px-5 py-3 hover:bg-green-50 font-semibold text-green-700 flex items-center gap-2"
-                                        >
-                                            Editar perfil
-                                        </button>
-
-                                        <button
-                                            onClick={handleLogout}
-                                            disabled={loading}
-                                            className="w-full text-left px-5 py-3 hover:bg-gray-50 font-semibold text-gray-800 flex items-center gap-2"
-                                        >
-                                            Cerrar sesión
-                                        </button>
-
-                                        <div className="mx-4 my-2" aria-hidden>
-                                            <div className="h-[2px] bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded" />
-                                        </div>
-
-                                        <button
-                                            onClick={handleDeleteAccount}
-                                            disabled={loading}
-                                            className="w-full text-left px-5 py-3 text-amber-800 hover:bg-red-50 font-semibold flex items-center gap-2"
-                                        >
-                                            Eliminar cuenta
-                                        </button>
-                                    </div>
-                                </Portal>
-                            )}
-                        </>
-                    ) : (
-                        <Link to="/login" className="px-3 py-1 text-sm text-gray-700 hover:text-green-600">Iniciar sesión</Link>
-                    )}
-                </div>
+                        )}
+                    </>
+                ) : (
+                    <Link to="/login" className="px-3 py-1 text-sm text-gray-700 hover:text-green-600">
+                        Iniciar sesión
+                    </Link>
+                )}
             </div>
+           
         </header>
     );
 }
