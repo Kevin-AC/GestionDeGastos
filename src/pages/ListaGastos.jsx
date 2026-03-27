@@ -6,7 +6,6 @@ import Nav from "../components/Nav";
 
 export default function ListaGastos(){
     const {
-        categoriaSeleccionada,
         gastosOrdenados,
         nombreCategoria,
         totalGastos,
@@ -16,7 +15,7 @@ export default function ListaGastos(){
         refetchGastos,
         setOrdenado
     } = useGastosFiltrados();
-    console.log(categoriaSeleccionada)
+  
     const deleteGasto = useDelete();
 
 
@@ -62,7 +61,7 @@ export default function ListaGastos(){
                 <div className="p-6 bg-linear-to-r from-gray-50 to-Neutral-1/50 backdrop-blur-sm rounded-3xl shadow-xl border border-Neutral-2/30 hover:shadow-2xl transition-all">
                     <div className="flex items-center justify-between mb-4">
                         
-                        <div className="flex items-center gap-4">
+                        <div className="flex lg:flex-row flex-col items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-Verde/10 border-2 border-Verde/30 flex items-center justify-center">
                                 <span className="text-xl font-bold text-Verde">{nombreCategoria.slice(0,1)}</span>
                             </div>
@@ -72,23 +71,25 @@ export default function ListaGastos(){
                             </div>
                         </div>
                         {/**filtro para ordenar */}
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm font-medium text-gray-700">Ordenar:</label>
-                            <select
-                                value={ordenado}
-                                onChange={(e) => setOrdenado(e.target.value)}
-                                className="px-3 py-1.5 text-sm border border-Neutral-2/50 rounded-lg outline-none focus:ring-2 focus:ring-Verde focus:border-transparent"
-                            >
-                                <option value="monto-desc">Monto (mayor a menor)</option>
-                                <option value="fecha-desc">Fecha (más reciente)</option>
-                                <option value="fecha-asc">Fecha (más antigua)</option>
-                                <option value="monto-asc">Monto (menor a mayor)</option>
-                            </select>
-                        </div>
+                        <div className='flex lg:flex-row flex-col gap-4'>
+                            <div className="flex items-center gap-2">
+                            
+                                <select
+                                    value={ordenado}
+                                    onChange={(e) => setOrdenado(e.target.value)}
+                                    className="px-3 py-1.5 text-sm border border-Neutral-2/50 rounded-lg outline-none focus:ring-2 focus:ring-Verde focus:border-transparent"
+                                >
+                                    <option value="monto-desc">Monto (mayor a menor)</option>
+                                    <option value="fecha-desc">Fecha (más reciente)</option>
+                                    <option value="fecha-asc">Fecha (más antigua)</option>
+                                    <option value="monto-asc">Monto (menor a mayor)</option>
+                                </select>
+                            </div>
 
-                        <div className="text-right">
-                            <p className="text-2xl font-bold text-gray-900">${totalGastos.toLocaleString()}</p>
-                            {/* <p className="text-sm text-gray-500">3.0% del presupuesto</p> */}
+                            <div className="text-right">
+                                <p className="text-2xl font-bold text-gray-900">${totalGastos.toLocaleString()}</p>
+                                {/* <p className="text-sm text-gray-500">3.0% del presupuesto</p> */}
+                            </div>
                         </div>
                     </div>
                     <div className="h-2 bg-Neutral-2/50 rounded-full overflow-hidden">
