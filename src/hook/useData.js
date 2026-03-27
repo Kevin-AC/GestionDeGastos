@@ -38,14 +38,16 @@ export const useData=(endpoint)=>{
     return {data,refetch};
 };
 // usePost retrocompatible: detecta FormData, objeto JS o URLSearchParams
-export const usePost = () => {
-    const postData = async (endpoint, body, options = {}) => {
+export const useApi = () => {
+
+    const request = async (endpoint, body, options = {}) => {
         // options: { forceFormUrlEncoded: boolean, includeCredentials: boolean }
         const url = `${API_URL}/${endpoint}`;
         let fetchOptions = {
             method: 'POST',
-            headers: {},
+            headers: { 'Content-Type': 'application/json', },
             credentials: options.includeCredentials ? 'include' : undefined,
+            body: JSON.stringify(body)
         };
 
         // Si body es FormData (ej. new FormData()), dejar tal cual (no setear Content-Type)
@@ -79,7 +81,7 @@ export const usePost = () => {
         }
         return payload;
     };
-    return postData;
+    return { post: request };
 };
 
 export const useDelete=()=>{
@@ -93,11 +95,11 @@ export const useDelete=()=>{
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({
-                accion: 'eliminar',
-                idTransaccion,
-                idUsuario:userID
-            })
+            // body: JSON.stringify({
+            //     accion: 'eliminar',
+            //     idTransaccion,
+            //     idUsuario:userID
+            // })
         })
         if(!response.ok){
             throw new Error('Error al eliminar')

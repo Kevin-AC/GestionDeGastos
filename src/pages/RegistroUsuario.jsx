@@ -1,12 +1,12 @@
 import  {useState } from 'react';
-import { usePost } from '../hook/useData';
+import { useApi} from '../hook/useData';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom';
 
 export default function RegistroUsuario() {
     const navigate = useNavigate();
-    const postData= usePost()
+    const {post}= useApi();
    
     const [formData, setFormData] = useState({
         nombre: '',
@@ -27,7 +27,7 @@ export default function RegistroUsuario() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const registerPromise = postData('UsuarioServlet', formData)
+        const registerPromise = post('UsuarioServlet', formData)
             .then(data => {
                 return new Promise(resolve => {
                     setTimeout(() => resolve({ success: true, data }), 2000);

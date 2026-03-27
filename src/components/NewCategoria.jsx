@@ -1,12 +1,12 @@
 import { toast } from 'sonner'
 import { useState } from 'react';
-import { usePost } from '../hook/useData';
+import { useApi } from '../hook/useData';
 export default function NewCategoria(){
     const [nombreCat, setNombreCat] = useState('');
-    const postData = usePost();
+    const {post} = useApi();
     const agregarCategoria = async () => {
         try {
-            await postData('CategoriaServlet', {
+            await post('CategoriaServlet', {
                 nombre: nombreCat,
             });
             toast.success('¡Categoría agregada!');

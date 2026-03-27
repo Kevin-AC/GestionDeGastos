@@ -3,13 +3,14 @@ import { useContext } from "react";
 import { toast } from 'sonner'
 import { GastosContext } from "../contexts/GastosProvider";
 import { AuthContext } from "../contexts/AuthPrivider";
-import { usePost } from "../hook/useData";
+import { useApi } from "../hook/useData";
 import Nav from "../components/Nav";
 export default function NewIngreso() {
     const { user } = useContext(AuthContext);
 
     const context = useContext(GastosContext)
     const { refetchGastos } = context || {};
+    const {post} = useApi();
 
     const userID = user?.id || user?.idUsuario || 1; //almacenar id de usuario del context
 
@@ -21,7 +22,7 @@ export default function NewIngreso() {
         fecha: new Date().toISOString().split('T')[0]
     });
 
-    const postData = usePost();
+   
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,7 +37,7 @@ export default function NewIngreso() {
 
         try{
             
-            await postData('TransaccionServlet',{
+            await post('TransaccionServlet',{
                 accion:'insertar',
                 ...formData
             })

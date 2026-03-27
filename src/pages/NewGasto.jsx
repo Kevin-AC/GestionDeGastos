@@ -3,7 +3,7 @@ import { useContext} from "react";
 import { GastosContext } from "../contexts/GastosProvider";
 import { AuthContext } from "../contexts/AuthPrivider";
 import { useState} from 'react';
-import { usePost } from "../hook/useData";
+import { useApi} from "../hook/useData";
 import { useLocation } from "react-router-dom";
 import Nav from "../components/Nav";
 
@@ -11,13 +11,12 @@ import Nav from "../components/Nav";
 
 export default function NewGasto(){
     const { user } = useContext(AuthContext);
- 
+    const {post} = useApi();
 
     const context = useContext(GastosContext); 
     const { refetchGastos } = context || {};
 
 
-    const postData=usePost();
     const location = useLocation();
 
     const userID=user?.id || user?.idUsuario || 1; //almacenar id de usuario del context
@@ -68,7 +67,7 @@ export default function NewGasto(){
         
 
         try{
-            await postData('TransaccionServlet',{...formData,accion:modo});
+            await post('TransaccionServlet',{...formData,accion:modo});
             await refetchGastos();//recargar informacion 
             if (modo ==='insertar'){
                 toast.success('Gasto guardado correctamente');
