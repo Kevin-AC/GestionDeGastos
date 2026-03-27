@@ -1,13 +1,15 @@
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';
-import { useDelete } from '../hook/useData';
+import { AuthContext } from '../contexts/AuthPrivider';
+import { useApi } from '../hook/useData';
 import { toast } from 'sonner'
 import Nav from "../components/Nav";
 import CardGasto from '../components/CardGasto';
 import { calcularTotalGastos } from "../logic/calcularGastoPorCategoria"
 
 export default function ListaGastosGeneral() {
-    const deleteGasto = useDelete();
+    const {post}=useApi();
+    const { user} = useContext(AuthContext);
     const context = useContext(GastosContext);
    
     const { categoriasConGastos, refetchGastos } = context || {};
@@ -17,6 +19,7 @@ export default function ListaGastosGeneral() {
     })))
     if (!categoriasConGastos) return <div>Cargando...</div>;
     const total = calcularTotalGastos(todosLosGastos)
+
 
     const handleDelete = async (idTransaccion) => {
         const gasto = todosLosGastos.find(
@@ -29,12 +32,23 @@ export default function ListaGastosGeneral() {
                 label: "Eliminar",
                 onClick: async () => {
                     try {
-                        await deleteGasto("TransaccionServlet", idTransaccion, 1);
-                        toast.success("Registro eliminado", {
-                            description: `Gasto: "${gasto.descripcion}"`,
-                        });
+                        const res = await post("TransaccionServlet",{
+                            accion:'eliminar',
+                            idTransaccion: gasto.idTransaccion,
+                            idUsuario: user.idUsuario,
+                        }, { includeCredentials: true });
+                        
+                        if(res?.success){
+                            toast.success("Registro eliminado", {
+                                description: `Gasto: "${gasto.descripcion}"`,
+                            });
+                        }else{
+                            toast.error(res?.message || 'Error al eliminar');
+                           
+                        }
                         await refetchGastos();
                     } catch (error) {
+                        console.log(error)
                         toast.error("Error al eliminar", {
                             description: error.message,
                         });
