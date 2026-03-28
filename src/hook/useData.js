@@ -8,17 +8,15 @@ const API_URL = '/GestorGastos';  //url   http://localhost:8080
 export const useData=(endpoint)=>{
     const [data,setData]= useState(null)
     const [trigger,setTrigger]= useState(0);
-    const {user} = useContext(AuthContext);
-    const userID= user?.idUsuario || user?.id || 1 ;
-
-    //console.log('🔍 useData:', endpoint, 'userId:', userID, 'user:', user); 
+    const { user } = useContext(AuthContext);
+    const userID = user?.idUsuario || user?.id || 1;
 
 
     useEffect(() => {
-        //console.log('⚡ useEffect ejecutado:', endpoint, userID);
+       
         if(endpoint && userID){
             const URL = `${API_URL}/${endpoint}?idUsuario=${userID}`
-           // console.log('🚀 Fetch URL:', URL);
+           
             fetch(URL)
                 .then(res => {
                     console.log('📡 Response status:', res.status, res.ok);
@@ -37,35 +35,43 @@ export const useData=(endpoint)=>{
     const refetch = () => setTrigger(prev => prev + 1);//actualizar el fetch mostar nuevos registros
     return {data,refetch};
 };
-// usePost retrocompatible: detecta FormData, objeto JS o URLSearchParams
+
 export const useApi = () => {
+    const { user } = useContext(AuthContext);
+    const userID = user?.idUsuario || user?.id || 1;
 
     const request = async (endpoint, body, options = {}) => {
         // options: { forceFormUrlEncoded: boolean, includeCredentials: boolean }
         const url = `${API_URL}/${endpoint}`;
+
+        const enrichedBody = body instanceof FormData
+            ? (() => { body.set('idUsuario', userID); return body; })()
+            : { idUsuario: userID, ...body };
+
+
         let fetchOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
             credentials: options.includeCredentials ? 'include' : undefined,
-            body: JSON.stringify(body)
         };
 
         // Si body es FormData (ej. new FormData()), dejar tal cual (no setear Content-Type)
-        if (body instanceof FormData) {
-            fetchOptions.body = body;
+        if (enrichedBody instanceof FormData) {
+            fetchOptions.body = enrichedBody;
             // no setear headers Content-Type para que el navegador lo gestione
         } else if (options.forceFormUrlEncoded) {
             // Forzar application/x-www-form-urlencoded (mantener compatibilidad)
+            console.log('enrichedBody:', enrichedBody);
             fetchOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-            fetchOptions.body = new URLSearchParams(body).toString();
-        } else if (typeof body === 'object' && body !== null) {
+            fetchOptions.body = new URLSearchParams(enrichedBody).toString();
+        } else if (typeof enrichedBody === 'object' && enrichedBody !== null) {
             // Enviar JSON por defecto para objetos
             fetchOptions.headers['Content-Type'] = 'application/json';
-            fetchOptions.body = JSON.stringify(body);
+            fetchOptions.body = JSON.stringify(enrichedBody);
         } else {
             // Cualquier otro caso (string), enviarlo tal cual y usar text/plain
             fetchOptions.headers['Content-Type'] = 'text/plain';
-            fetchOptions.body = String(body);
+            fetchOptions.body = String(enrichedBody);
         }
 
         const res = await fetch(url, fetchOptions);
@@ -84,28 +90,4 @@ export const useApi = () => {
     return { post: request };
 };
 
-export const useDelete=()=>{
-    const {user}= useContext(AuthContext);
-    const userID = user?.idUsuario || user?.id || 1;
-
-    const deleteData = async (endpoint, idTransaccion) => {
-        const response = await fetch(`${API_URL}/${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            // body: JSON.stringify({
-            //     accion: 'eliminar',
-            //     idTransaccion,
-            //     idUsuario:userID
-            // })
-        })
-        if(!response.ok){
-            throw new Error('Error al eliminar')
-        }
-        return response.text();
-    }
-    return deleteData
-}
 
