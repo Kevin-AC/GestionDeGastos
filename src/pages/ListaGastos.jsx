@@ -1,10 +1,11 @@
-import { toast } from 'sonner'
+
 import { useGastosFiltrados } from '../hook/useGastosFiltrados'
-import { useDelete } from '../hook/useData';
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
-
+import { useDeleteTransaccion } from '../hook/useDeleteTransaccion'
 export default function ListaGastos(){
+    
+
     const {
         gastosOrdenados,
         nombreCategoria,
@@ -15,9 +16,8 @@ export default function ListaGastos(){
         refetchGastos,
         setOrdenado
     } = useGastosFiltrados();
-  
-    const deleteGasto = useDelete();
-
+    
+    const { handleDelete } = useDeleteTransaccion(refetchGastos);
 
     if (loading) {
         return (
@@ -31,25 +31,6 @@ export default function ListaGastos(){
         );
     }
 
-    const handleDelete = async (idTransaccion) => {
-        const gasto = gastosOrdenados.find(g => g.idTransaccion === idTransaccion);
-
-        toast.warning(`¿Eliminar "${gasto?.descripcion}"?`, {
-            duration: Infinity,
-            action: {
-                label: "Eliminar",
-                onClick: async () => {
-                    try {
-                        await deleteGasto("TransaccionServlet", idTransaccion, 1);
-                        toast.success("Gasto eliminado");
-                        refetchGastos()
-                    } catch (error) {
-                        toast.error("Error al eliminar",error);
-                    }
-                },
-            },
-        });
-    };
 
     
     
@@ -110,7 +91,7 @@ export default function ListaGastos(){
                                 fecha={gasto.fecha}
                                 valor={gasto.monto}
                                 idGasto={gasto.idTransaccion}
-                                onDelete={handleDelete}
+                                onDelete={() => handleDelete(gasto.idTransaccion, gastosOrdenados)}
                             />
                         ))}
                     </div>

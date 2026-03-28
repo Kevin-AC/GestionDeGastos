@@ -1,63 +1,23 @@
 import { useContext } from 'react';
-import { GastosContext } from '../contexts/GastosProvider';
-import { AuthContext } from '../contexts/AuthPrivider';
-import { useApi } from '../hook/useData';
-import { toast } from 'sonner'
 import Nav from "../components/Nav";
 import CardGasto from '../components/CardGasto';
 import { calcularTotalGastos } from "../logic/calcularGastoPorCategoria"
-
+import { useDeleteTransaccion } from '../hook/useDeleteTransaccion'
+import { GastosContext } from '../contexts/GastosProvider';
 export default function ListaGastosGeneral() {
-    const {post}=useApi();
-    const { user} = useContext(AuthContext);
-    const context = useContext(GastosContext);
-   
-    const { categoriasConGastos, refetchGastos } = context || {};
-    
-    const todosLosGastos=categoriasConGastos.flatMap(categoria =>categoria.gastos.map(gasto=>({
-        ...gasto,categoria:categoria.nombre
+
+    const { categoriasConGastos, refetchGastos } = useContext(GastosContext) || {};
+    const { handleDelete } = useDeleteTransaccion(refetchGastos);
+
+    const todosLosGastos = categoriasConGastos.flatMap(categoria => categoria.gastos.map(gasto => ({
+        ...gasto, categoria: categoria.nombre
     })))
-    if (!categoriasConGastos) return <div>Cargando...</div>;
+
     const total = calcularTotalGastos(todosLosGastos)
 
+    if (!categoriasConGastos || categoriasConGastos.length === 0) return <div>Cargando...</div>;
 
-    const handleDelete = async (idTransaccion) => {
-        const gasto = todosLosGastos.find(
-            (gasto) => gasto.idTransaccion === idTransaccion
-        );
 
-        toast.warning(`¿Eliminar "${gasto?.descripcion}"?`, {
-            duration: Infinity,
-            action: {
-                label: "Eliminar",
-                onClick: async () => {
-                    try {
-                        const res = await post("TransaccionServlet",{
-                            accion:'eliminar',
-                            idTransaccion: gasto.idTransaccion,
-                            idUsuario: user.idUsuario,
-                        }, { includeCredentials: true });
-                        
-                        if(res?.success){
-                            toast.success("Registro eliminado", {
-                                description: `Gasto: "${gasto.descripcion}"`,
-                            });
-                        }else{
-                            toast.error(res?.message || 'Error al eliminar');
-                           
-                        }
-                        await refetchGastos();
-                    } catch (error) {
-                        console.log(error)
-                        toast.error("Error al eliminar", {
-                            description: error.message,
-                        });
-                    }
-                },
-            },
-        });
-    }
-  
 
     return (
         <section className='min-h-screen'>
@@ -90,7 +50,7 @@ export default function ListaGastosGeneral() {
                         valor={gasto.monto}
                         fecha={gasto.fecha}
                         idGasto={gasto.idTransaccion}
-                        onDelete={handleDelete}
+                        onDelete={() => handleDelete(gasto.idTransaccion, todosLosGastos)}
                     
                     />
                 ))}

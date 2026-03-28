@@ -1,41 +1,13 @@
 import { useContext } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';  
-import { toast } from 'sonner'
-import { useDelete } from '../hook/useData';
 import CardIngreso from "../components/CardIngreso"; 
 import Nav from "../components/Nav";
-
+import { useDeleteTransaccion } from '../hook/useDeleteTransaccion';
 export default function ListaIngresos() {
     const context = useContext(GastosContext);
-    const deleteIngreso = useDelete();
     const { ingresos, totalIngresos, refetchGastos } = context || {};
-
+    const {handleDelete}=useDeleteTransaccion(refetchGastos);
     if (!ingresos) return <div>Cargando...</div>;
-
-    const handleDelete = async (idTransaccion) => {
-        const ingreso = ingresos.find((ingreso) => ingreso.idTransaccion === idTransaccion)
-        
-        toast.warning(`Eliminar "${ingreso?.descripcion}"?`,{
-            duration:Infinity,
-            action:{
-                label:"Eliminar",
-                onClick:async ()=>{
-                    try {
-                        await deleteIngreso('TransaccionServlet', idTransaccion, 1);
-                        toast.success("Registro eliminado", {
-                            description: `ingreso: "${ingreso.descripcion}"`,
-                        });
-                        await refetchGastos();
-                    } catch (error) {
-                        toast.error("Error al eliminar", {
-                            description: error.message,
-                        });
-                    }
-                }
-            }
-        })
-       
-    };
 
     return (
         <section className='min-h-screen'>
@@ -75,7 +47,7 @@ export default function ListaIngresos() {
                             fecha={ingreso.fecha}
                             valor={ingreso.monto}
                             idIngreso={ingreso.idTransaccion}
-                            onDelete={handleDelete}
+                            onDelete={() => handleDelete(ingreso.idTransaccion, ingresos,'Ingreso')}
                         />
                     ))
                 )}
