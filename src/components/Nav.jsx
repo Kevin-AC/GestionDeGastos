@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 
+import { confirmarEjecucion } from "../logic/ConfirmarEjecucion";
 import { useState, useContext} from 'react';
 import { Link} from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthPrivider';
@@ -77,37 +77,24 @@ export default function Nav() {
             toast.error('No autenticado');
             return;
         }
+        confirmarEjecucion({
+            message: `¿Eliminar tu cuenta "${user?.nombre || ''}"?`,
+            request: () => post('UsuarioServlet', {
+                accion: 'eliminar',
+            }, { includeCredentials: true }),
 
-        toast.warning(`¿Eliminar tu cuenta "${user?.nombre || ''}"?`, {
-            duration: Infinity,
-            action: {
-                label: "Eliminar",
-                onClick: async () => {
-                    setLoading(true);
-                    try {
-                        const res = await post('UsuarioServlet', {
-                            accion: 'eliminar',
-                            idUsuario: user.idUsuario
-                        }, { includeCredentials: true });
-
-                        if (res?.success) {
-                            setUser(null);
-                            localStorage.removeItem('user');
-                            toast.success(res.message || 'Cuenta eliminada');
-                        } else {
-                            toast.error(res?.message || 'Error al eliminar');
-                        }
-
-                    } catch (err) {
-                       
-                        toast.error('Error de red al eliminar cuenta');
-                    } finally {
-                        setLoading(false);
-                        setOpenUserMenu(false);
-                    }
-                },
+            onSuccess: (res) => {
+                setUser(null);
+                localStorage.removeItem('user');
+                toast.success(res.message || 'Cuenta eliminada');
             },
+
+            onFinally: () => {
+                setLoading(false);
+                setOpenUserMenu(false);
+            }
         });
+        
     }
 
 

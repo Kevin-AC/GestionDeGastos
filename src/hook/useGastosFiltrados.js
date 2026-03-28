@@ -48,8 +48,6 @@ export function useGastosFiltrados() {
         totalGastos: categoriaSeleccionada?.total,
         cantidadGastos: gastosCategoria.length,
         loading: !categoriasConGastos || !categoriaId || !categoriaSeleccionada,
-
-        // Estado y acciones
         ordenado,
         setOrdenado,
         refetchGastos
