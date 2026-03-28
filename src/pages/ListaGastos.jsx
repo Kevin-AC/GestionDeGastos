@@ -3,9 +3,8 @@ import { useGastosFiltrados } from '../hook/useGastosFiltrados'
 import CardGasto from "../components/CardGasto";
 import Nav from "../components/Nav";
 import { useDeleteTransaccion } from '../hook/useDeleteTransaccion'
+import FiltroGastos from '../components/FiltroGastos';
 export default function ListaGastos(){
-    
-
     const {
         gastosOrdenados,
         nombreCategoria,
@@ -53,19 +52,10 @@ export default function ListaGastos(){
                         </div>
                         {/**filtro para ordenar */}
                         <div className='flex lg:flex-row flex-col gap-4'>
-                            <div className="flex items-center gap-2">
-                            
-                                <select
-                                    value={ordenado}
-                                    onChange={(e) => setOrdenado(e.target.value)}
-                                    className="px-3 py-1.5 text-sm border border-Neutral-2/50 rounded-lg outline-none focus:ring-2 focus:ring-Verde focus:border-transparent"
-                                >
-                                    <option value="monto-desc">Monto (mayor a menor)</option>
-                                    <option value="fecha-desc">Fecha (más reciente)</option>
-                                    <option value="fecha-asc">Fecha (más antigua)</option>
-                                    <option value="monto-asc">Monto (menor a mayor)</option>
-                                </select>
-                            </div>
+                           <FiltroGastos
+                                ordenado={ordenado}
+                                setOrdenado={setOrdenado}
+                           />
 
                             <div className="text-right">
                                 <p className="text-2xl font-bold text-gray-900">${totalGastos.toLocaleString()}</p>

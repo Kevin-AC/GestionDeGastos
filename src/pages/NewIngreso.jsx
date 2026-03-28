@@ -28,8 +28,6 @@ export default function NewIngreso() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('📤 Datos enviados:', formData);
-
         try{
             
             await post('TransaccionServlet',{

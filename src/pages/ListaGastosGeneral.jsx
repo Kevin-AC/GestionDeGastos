@@ -1,19 +1,32 @@
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Nav from "../components/Nav";
 import CardGasto from '../components/CardGasto';
 import { calcularTotalGastos } from "../logic/calcularGastoPorCategoria"
 import { useDeleteTransaccion } from '../hook/useDeleteTransaccion'
 import { GastosContext } from '../contexts/GastosProvider';
+import FiltroGastos from '../components/FiltroGastos';
 export default function ListaGastosGeneral() {
-
     const { categoriasConGastos, refetchGastos } = useContext(GastosContext) || {};
     const { handleDelete } = useDeleteTransaccion(refetchGastos);
+    const [ordenado, setOrdenado ] = useState('fecha-desc');
 
-    const todosLosGastos = categoriasConGastos.flatMap(categoria => categoria.gastos.map(gasto => ({
-        ...gasto, categoria: categoria.nombre
-    })))
+    const todosLosGastos = useMemo(() => {
+        const lista = (categoriasConGastos ?? []).flatMap(categoria =>
+            (categoria.gastos ?? []).map(gasto => ({ ...gasto, categoria: categoria.nombre }))
+        ); return [...lista].sort((a, b) => {
+            switch (ordenado) {
+                case 'monto-desc': return b.monto - a.monto;
+                case 'monto-asc': return a.monto - b.monto;
+                case 'fecha-desc': return new Date(b.fecha) - new Date(a.fecha);
+                case 'fecha-asc': return new Date(a.fecha) - new Date(b.fecha);
+                default: return 0;
+            }
+        });
+    }, [categoriasConGastos, ordenado]);
 
     const total = calcularTotalGastos(todosLosGastos)
+
+
 
     if (!categoriasConGastos || categoriasConGastos.length === 0) return <div>Cargando...</div>;
 
@@ -34,15 +47,22 @@ export default function ListaGastosGeneral() {
                                 <p className="text-sm text-gray-600">{todosLosGastos.length} Gastos</p>
                             </div>
                         </div>
-                        <div className="text-right">
-                            <p className="text-2xl font-bold text-Azul">${total.toLocaleString()}</p>
+                        <div className='flex lg:flex-row flex-col gap-4'>
+                            <FiltroGastos
+                                ordenado={ordenado}
+                                setOrdenado={setOrdenado}
+                            />
+
+                            <div className="text-right">
+                                <p className="text-2xl font-bold text-gray-900">${total.toLocaleString()}</p>
+                            </div>
                         </div>
                     </div>
                     <div className="h-2 bg-Neutral-2/50 rounded-full overflow-hidden">
                         <div className="h-full bg-Verde rounded-full" style={{ width: '100%' }} />
                     </div>
                 </div>
-                {todosLosGastos.map(gasto=>(
+                {todosLosGastos.map(gasto => (
                     <CardGasto
                         key={gasto.idTransaccion}
                         gasto={gasto}
@@ -51,11 +71,11 @@ export default function ListaGastosGeneral() {
                         fecha={gasto.fecha}
                         idGasto={gasto.idTransaccion}
                         onDelete={() => handleDelete(gasto.idTransaccion, todosLosGastos)}
-                    
+
                     />
                 ))}
-                
-               
+
+
             </div>
         </section>
     );
