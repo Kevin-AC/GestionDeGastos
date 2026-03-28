@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthPrivider';
 const API_URL = '/GestorGastos';  //url   http://localhost:8080
@@ -10,9 +10,11 @@ export const useData=(endpoint)=>{
     const [trigger,setTrigger]= useState(0);
     const { user } = useContext(AuthContext);
     const userID = user?.idUsuario || user?.id || 1;
+    const debounceRef = useRef(null)
 
 
     useEffect(() => {
+        let cancelled = false;
        
         if(endpoint && userID){
             const URL = `${API_URL}/${endpoint}?idUsuario=${userID}`
@@ -23,16 +25,21 @@ export const useData=(endpoint)=>{
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     return res.json();
                 })
-                .then(recibidos => {setData(recibidos)})
+                .then(recibidos => {if(!cancelled) setData(recibidos)})
                 .catch(error =>{
                     console.error('❌ Fetch error:', error);
-                    setData([]); 
+                    if(!cancelled)setData([]); 
                 })
         }
-       
+       return ()=> {cancelled=true}
     }, [endpoint,trigger,userID])
 
-    const refetch = () => setTrigger(prev => prev + 1);//actualizar el fetch mostar nuevos registros
+    const refetch = () =>{
+        if(debounceRef.current)clearTimeout(debounceRef.current);
+        debounceRef.current=setTimeout(() => {
+            setTrigger(prev=>prev+1)
+        }, 300);
+    };//actualizar el fetch mostar nuevos registros
     return {data,refetch};
 };
 

@@ -2,20 +2,15 @@ import { useState } from "react";
 import { useContext } from "react";
 import { toast } from 'sonner'
 import { GastosContext } from "../contexts/GastosProvider";
-import { AuthContext } from "../contexts/AuthPrivider";
 import { useApi } from "../hook/useData";
 import Nav from "../components/Nav";
 export default function NewIngreso() {
-    const { user } = useContext(AuthContext);
 
     const context = useContext(GastosContext)
     const { refetchGastos } = context || {};
     const {post} = useApi();
 
-    const userID = user?.id || user?.idUsuario || 1; //almacenar id de usuario del context
-
     const [formData, setFormData] = useState({
-        idUsuario: userID,
         categoria_id: 1,
         descripcion: '',
         monto: '',
@@ -47,7 +42,6 @@ export default function NewIngreso() {
                 description: `Fecha: ${formData.fecha}`,
             })
             setFormData({ //limpiar registro
-                idUsuario: 1,
                 categoria_id: 1,
                 descripcion: '',
                 monto: '',
