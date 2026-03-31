@@ -19,7 +19,7 @@ export const useDeleteTransaccion = (refetch)=>{
             }),
             onSuccess: () => {
                 toast.success("Registro eliminado", {
-                    description: `${label}: "${item.descripcion}"`,
+                    description: `"${item.descripcion}"`,
                 });
                 refetch();
             }
