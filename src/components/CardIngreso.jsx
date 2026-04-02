@@ -8,7 +8,7 @@ export default function CardIngreso({ nombre, fecha, valor, idIngreso, onDelete 
                     </div>
                     <div>
                         <h4 className="font-bold text-gray-900">{nombre}</h4>
-                        <p className="text-sm text-gray-500">{new Date(fecha).toLocaleDateString('es-CO')}</p>
+                        <p className="text-sm text-gray-500">{fecha}</p>
                     </div>
                 </div>
                 <div className="text-right">

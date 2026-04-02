@@ -10,11 +10,17 @@ export default function NewIngreso() {
     const { refetchGastos } = context || {};
     const {post} = useApi();
 
+    const getLocalDate = () => {
+        const today = new Date();
+        today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+        return today.toISOString().split('T')[0];
+    };
+
     const [formData, setFormData] = useState({
         categoria_id: 1,
         descripcion: '',
         monto: '',
-        fecha: new Date().toISOString().split('T')[0]
+        fecha: getLocalDate()
     });
 
    
@@ -43,7 +49,7 @@ export default function NewIngreso() {
                 categoria_id: 1,
                 descripcion: '',
                 monto: '',
-                fecha: new Date().toISOString().split('T')[0]
+                fecha: getLocalDate()
             })
         }catch(error){
             toast.error('Error: ' + error.message);

@@ -70,7 +70,7 @@ export default function ListaGastosGeneral() {
                         valor={gasto.monto}
                         fecha={gasto.fecha}
                         idGasto={gasto.idTransaccion}
-                        onDelete={() => handleDelete(gasto.idTransaccion, todosLosGastos, gasto.descripcion)}
+                        onDelete={() => handleDelete(gasto.idTransaccion, todosLosGastos,gasto.descripcion)}
 
                     />
                 ))}

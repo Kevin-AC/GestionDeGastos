@@ -1,14 +1,36 @@
-import { useContext } from 'react';
+import { useContext,useState,useMemo } from 'react';
 import { GastosContext } from '../contexts/GastosProvider';  
 import CardIngreso from "../components/CardIngreso"; 
 import Nav from "../components/Nav";
 import { useDeleteTransaccion } from '../hook/useDeleteTransaccion';
+import FiltroGastos from '../components/FiltroGastos';
 export default function ListaIngresos() {
     const context = useContext(GastosContext);
-    const { ingresos, totalIngresos, refetchGastos } = context || {};
+    const { ingresos,totalIngresos, refetchGastos } = context || {};
     const {handleDelete}=useDeleteTransaccion(refetchGastos);
-    if (!ingresos) return <div>Cargando...</div>;
+    const [ordenado, setOrdenado] = useState('fecha-desc');
 
+    const ingresosFiltrados = useMemo(() => {
+        let resultado = [...ingresos];
+
+        resultado.sort((a, b) => {
+            switch (ordenado) {
+                case 'monto-desc':
+                    return Number(b.monto) - Number(a.monto);
+                case 'monto-asc':
+                    return Number(a.monto) - Number(b.monto);
+                case 'fecha-desc':
+                    return  b.fecha.localeCompare(a.fecha);
+                case 'fecha-asc':
+                    return  a.fecha.localeCompare(b.fecha);
+                default:
+                    return 0;
+            }
+        });
+
+        return resultado;
+    }, [ingresos, ordenado]);
+    if (!ingresos) return <div>Cargando...</div>;
     return (
         <section className='min-h-screen'>
             
@@ -26,7 +48,11 @@ export default function ListaIngresos() {
                                 <p className="text-sm text-gray-600">{ingresos.length} ingresos</p>
                             </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right flex gap-4">
+                            <FiltroGastos
+                                ordenado={ordenado}
+                                setOrdenado={setOrdenado}
+                            />
                             <p className="text-2xl font-bold text-Azul">${totalIngresos?.toLocaleString()}</p>
                         </div>
                     </div>
@@ -34,12 +60,13 @@ export default function ListaIngresos() {
                         <div className="h-full bg-amber-300 rounded-full" style={{ width: '100%' }} />
                     </div>
                 </div>
+               
 
                 {/* Lista */}
-                {ingresos.length === 0 ? (
+                {ingresosFiltrados.length === 0 ? (
                     <p className="text-center text-gray-500 py-12">No hay ingresos registrados</p>
                 ) : (
-                    ingresos.map((ingreso) => (
+                        ingresosFiltrados.map((ingreso) => (
                         <CardIngreso
                             key={ingreso.idTransaccion}
                             ingreso={ingreso}

@@ -24,12 +24,18 @@ export default function NewGasto(){
     const gastoParaEditar = location.state?.gastoParaEditar;
     const modo = location.state?.modo || 'insertar';
 
+    const getLocalDate = () => {
+        const today = new Date();
+        today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+        return today.toISOString().split('T')[0];
+    };
+
     const datosIniciales = {
         idUsuario: userID,
         categoria_id: 1,
         descripcion: '',
         monto: '',
-        fecha: new Date().toISOString().split('T')[0]
+        fecha: getLocalDate()
     };
     //const  [formData,setFormData]=useState(datosIniciales)
 
@@ -41,7 +47,7 @@ export default function NewGasto(){
                 categoria_id: gastoParaEditar.categoria_id,
                 descripcion: gastoParaEditar.descripcion || '',
                 monto: gastoParaEditar.monto?.toString() || '',
-                fecha: gastoParaEditar.fecha?.split('T')[0] || new Date().toISOString().split('T')[0]
+                fecha: gastoParaEditar.fecha?.split('T')[0] || getLocalDate()
             };
         }
         return {
@@ -49,7 +55,7 @@ export default function NewGasto(){
             categoria_id: 1,
             descripcion: '',
             monto: '',
-            fecha: new Date().toISOString().split('T')[0]
+            fecha: getLocalDate()
         };
     });
 
